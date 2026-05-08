@@ -335,7 +335,6 @@
 
     body.modal-open {
       overflow: hidden;
-      touch-action: none;
     }
 
     body.scene-focus .cabinet-panel,
@@ -23265,49 +23264,6 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       renderDrugStrip();
       renderAdmin();
     }
-
-    // ═══════════════════════════════════════════════════════════════════
-    // 防止 bfcache 導致 modal / panel 卡住（UI freeze after tab switch）
-    //
-    // 問題：當分頁進入 bfcache（背景快取），所有 setTimeout 都會凍結，
-    // 導致 .closing class 卡住，.show 殘留，回來後整個頁面無法點擊
-    // （因 body.modal-open 的 touch-action: none 佈滿全頁）。
-    //
-    // 解法：在 bfcache 之前強行重置所有浮動面板狀態。
-    // ═══════════════════════════════════════════════════════════════════
-    function resetAllFloatingPanels() {
-      // 清除所有 closing timer，防止計時器回來後意外關閉
-      window.clearTimeout(closeDrugModal.timer);
-      window.clearTimeout(closeTempDrugModal.timer);
-      window.clearTimeout(closeAdminPanel.timer);
-      window.clearTimeout(closeDrugList.timer);
-      if (setMobileActionsOpen.closeTimer) window.clearTimeout(setMobileActionsOpen.closeTimer);
-      if (setSearchOpen.closeTimer)       window.clearTimeout(setSearchOpen.closeTimer);
-
-      // 立刻移除所有 show / closing class
-      dom.modal.classList.remove('show', 'closing');
-      dom.tempDrugModal.classList.remove('show', 'closing');
-      dom.adminPanel.classList.remove('show', 'closing');
-      dom.mobileActions.classList.remove('is-open', 'closing');
-      dom.workPanel.classList.remove('closing');
-      dom.searchDock.classList.remove('is-open', 'closing');
-
-      // 移除 body.modal-open（這才是讓 touch-action: none 佈滿全頁的元兇）
-      document.body.classList.remove('modal-open');
-
-      // 重置狀態變數
-      activeDrugIndex = -1;
-      activeLocationId = '';
-      activeCalcLines = [];
-      calcStartsNewDraft = false;
-      tempDrugTargetLocationId = '';
-      currentLocationId = '';
-      syncSceneFocus();
-    }
-
-    // 進入 bfcache 前觸發（適用 Safari / Firefox / Chrome）
-    window.addEventListener('pagehide', resetAllFloatingPanels);
-
 
     async function initApp() {
       updateRetroClock();
