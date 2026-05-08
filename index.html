@@ -266,7 +266,7 @@
       left: 50%;
       top: calc(100% + 9px);
       z-index: 28;
-      width: min(420px, calc(100vw - 24px));
+      width: min(520px, calc(100vw - 8px));
       max-height: min(420px, calc(100dvh - 92px));
       padding: 8px;
       overflow-y: auto;
@@ -296,10 +296,10 @@
       width: 100%;
       min-height: 48px;
       padding: 8px 10px;
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      gap: 6px 12px;
       color: #4D4841;
       background: transparent;
       border: 1px solid transparent;
@@ -323,9 +323,11 @@
 
     .cabinet-option-name {
       min-width: 0;
-      overflow: visible;
-      text-overflow: clip;
-      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-break: keep-all;
+      overflow-wrap: normal;
       line-height: 1.25;
       font-weight: 720;
     }
@@ -342,6 +344,7 @@
       font-size: 11px;
       font-weight: 720;
       line-height: 1;
+      white-space: nowrap;
     }
 
     .cabinet-option-status::before {
@@ -391,13 +394,13 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      width: 122px;
+      width: clamp(104px, 14vw, 132px);
       height: 32px;
       padding: 0 9px;
       color: #5E5146;
       background: #E7E3DD;
       border: 1px solid rgba(255, 255, 255, .74);
-      border-radius: 999px;
+      border-radius: 10px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .86), 0 8px 18px rgba(17, 17, 17, .07);
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
       font-size: 11.5px;
@@ -2076,8 +2079,8 @@
 
       .cabinet-picker-menu {
         position: fixed;
-        left: 10px;
-        right: 10px;
+        left: 4px;
+        right: 4px;
         top: 58px;
         width: auto;
         max-height: min(392px, calc(100dvh - 88px));
@@ -2092,12 +2095,15 @@
       .cabinet-option {
         min-height: 46px;
         padding: 9px 10px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        justify-items: stretch;
         gap: 8px;
       }
 
       .cabinet-option-name {
-        font-size: 13px;
+        font-size: 13.5px;
         line-height: 1.24;
+        white-space: nowrap;
       }
 
       .cabinet-option-status {
@@ -2124,11 +2130,11 @@
 
       .save-monitor {
         gap: 5px;
-        width: 112px;
+        width: clamp(96px, 30vw, 118px);
         height: 28px;
         padding: 0 7px;
         background: #DDDDD9;
-        border-radius: 999px;
+        border-radius: 9px;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72), 0 7px 16px rgba(17, 17, 17, .07);
         font-size: 10.5px;
       }
@@ -21865,6 +21871,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     let entries = {};
     let cabinetSaveStates = {};
     let cabinetStateRefreshId = 0;
+    let pageScrollLockY = 0;
 
     const $ = (selector) => document.querySelector(selector);
     const dom = {
@@ -22368,6 +22375,36 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       dom.retroClockTime.parentElement?.setAttribute('aria-label', '現在時間 ' + hours + ':' + minutes);
     }
 
+    function setPageScrollLocked(locked) {
+      const body = document.body;
+      const root = document.documentElement;
+      if (locked) {
+        if (body.classList.contains('scroll-locked')) return;
+        pageScrollLockY = window.scrollY || root.scrollTop || 0;
+        body.classList.add('scroll-locked');
+        body.style.position = 'fixed';
+        body.style.top = '-' + pageScrollLockY + 'px';
+        body.style.left = '0';
+        body.style.right = '0';
+        body.style.width = '100%';
+        body.style.overflow = 'hidden';
+        root.style.overflow = 'hidden';
+        return;
+      }
+      if (!body.classList.contains('scroll-locked')) return;
+      body.classList.remove('scroll-locked');
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      body.style.width = '';
+      body.style.overflow = '';
+      root.style.overflow = '';
+      const restoreY = pageScrollLockY;
+      pageScrollLockY = 0;
+      window.scrollTo(0, restoreY);
+    }
+
     function syncSceneFocus() {
       const adminOpen = dom.adminPanel.classList.contains('show') || dom.adminPanel.classList.contains('closing');
       const modalOpen = dom.modal.classList.contains('show')
@@ -22384,6 +22421,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       document.body.classList.toggle('scene-focus', hasFloatingCard);
       document.body.classList.toggle('admin-focus', adminOpen);
       document.body.classList.toggle('modal-open', modalOpen);
+      setPageScrollLocked(modalOpen);
     }
 
     function setSearchOpen(open) {
@@ -23861,7 +23899,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       doc.querySelector('#drugModal')?.classList.remove('show', 'closing');
       doc.querySelector('#tempDrugModal')?.classList.remove('show', 'closing');
       doc.querySelector('#adminPanel')?.classList.remove('show', 'closing');
-      doc.querySelector('body')?.classList.remove('scene-focus', 'admin-focus', 'modal-open');
+      doc.querySelector('body')?.classList.remove('scene-focus', 'admin-focus', 'modal-open', 'scroll-locked');
       const html = '<!doctype html>\n' + doc.outerHTML;
       downloadText(
         safeFileName(config.cabinetName || '調劑台盤點') + '_已綁定盤點網頁.html',
