@@ -220,56 +220,68 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0;
-      width: 30px;
-      height: 24px;
-      padding: 0;
-      color: #67635d;
-      background: #E2E2DE;
+      gap: 6px;
+      width: 96px;
+      height: 30px;
+      padding: 0 8px;
+      color: #5E5146;
+      background: #E7E3DD;
       border: 1px solid rgba(255, 255, 255, .74);
-      border-radius: 11px;
+      border-radius: 999px;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .86), 0 8px 18px rgba(17, 17, 17, .07);
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: .08em;
+      font-size: 11px;
+      font-weight: 760;
+      letter-spacing: 0;
       white-space: nowrap;
     }
 
-    .save-lamp {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #D98935;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, .58), 0 0 0 2px rgba(217, 137, 53, .08), 0 0 7px rgba(217, 137, 53, .24);
-      opacity: .74;
+    .save-icon {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      color: #D98935;
+      opacity: .86;
       transform: scale(1);
     }
 
-    .save-monitor.is-saving .save-lamp {
-      animation: saveLampPulse 880ms steps(1, end) 1;
+    .save-icon svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+      filter: drop-shadow(0 0 4px rgba(217, 137, 53, .24));
     }
 
-    @keyframes saveLampPulse {
+    .save-time {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .save-monitor.is-saving .save-icon {
+      animation: saveIconPulse 880ms steps(1, end) 1;
+    }
+
+    @keyframes saveIconPulse {
       0%, 100% {
-        opacity: .74;
+        opacity: .86;
         transform: scale(1);
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, .58), 0 0 0 2px rgba(217, 137, 53, .08), 0 0 7px rgba(217, 137, 53, .24);
+        filter: drop-shadow(0 0 4px rgba(217, 137, 53, .24));
       }
       8%, 21%, 58% {
-        opacity: .30;
-        transform: scale(.88);
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, .30), 0 0 0 1px rgba(217, 137, 53, .04), 0 0 3px rgba(217, 137, 53, .10);
+        opacity: .38;
+        transform: scale(.94);
+        filter: drop-shadow(0 0 1px rgba(217, 137, 53, .10));
       }
       13%, 30% {
-        opacity: .96;
-        transform: scale(1.22);
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, .72), 0 0 0 4px rgba(217, 137, 53, .12), 0 0 13px rgba(217, 137, 53, .46);
+        opacity: 1;
+        transform: scale(1.16);
+        filter: drop-shadow(0 0 9px rgba(217, 137, 53, .55));
       }
       68% {
-        opacity: .90;
-        transform: scale(1.08);
-        box-shadow: inset 0 1px 1px rgba(255, 255, 255, .66), 0 0 0 3px rgba(217, 137, 53, .09), 0 0 10px rgba(217, 137, 53, .32);
+        opacity: .94;
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 6px rgba(217, 137, 53, .34));
       }
     }
 
@@ -1885,13 +1897,20 @@
       }
 
       .save-monitor {
-        gap: 0;
-        width: 28px;
+        gap: 4px;
+        width: 82px;
         height: 24px;
-        padding: 0;
+        padding: 0 7px;
         background: #DDDDD9;
-        border-radius: 11px;
+        border-radius: 999px;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72), 0 7px 16px rgba(17, 17, 17, .07);
+        font-size: 10px;
+      }
+
+      .save-icon,
+      .save-icon svg {
+        width: 15px;
+        height: 15px;
       }
 
       .top-actions {
@@ -20875,7 +20894,14 @@
       </div>
       <div class="topbar-right">
         <div id="saveMonitor" class="save-monitor" aria-live="polite" aria-label="儲存狀態">
-          <span class="save-lamp" aria-hidden="true"></span>
+          <span class="save-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 3h12l2 2v16H5z"></path>
+              <path d="M8 3v6h8V3"></path>
+              <path d="M8 17h8"></path>
+            </svg>
+          </span>
+          <span id="saveTimeText" class="save-time">尚未存檔</span>
         </div>
         <div class="top-actions">
           <button id="exportCsvBtn" title="匯出藥品名稱、數量、效期 CSV">匯出 CSV</button>
@@ -21563,6 +21589,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       title: $('#cabinetTitle'),
       saveStatus: $('#saveStatus'),
       saveMonitor: $('#saveMonitor'),
+      saveTimeText: $('#saveTimeText'),
       cabinetSvg: $('#cabinetSvg'),
       drawerDetails: $('#drawerDetails'),
       shelfDetails: $('#shelfDetails'),
@@ -21888,7 +21915,34 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       if (!options.quiet) updateSaveStatus('盤點資料已暫存');
     }
 
+    function lastSaveKey(cabinetId = config?.cabinetId) {
+      return storagePrefix + 'lastSaveAt:' + (cabinetId || 'default');
+    }
+
+    async function loadLastSaveAt(cabinetId = config?.cabinetId) {
+      const key = lastSaveKey(cabinetId);
+      const dbValue = await dbGet(key).catch(() => null);
+      return dbValue || legacyGet(key) || '';
+    }
+
+    function formatLastSaveTime(value) {
+      const date = value ? new Date(value) : null;
+      if (!date || Number.isNaN(date.getTime())) return '尚未存檔';
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return '最後 ' + hours + ':' + minutes;
+    }
+
+    function updateLastSaveTime(value) {
+      const label = formatLastSaveTime(value);
+      dom.saveTimeText.textContent = label;
+      dom.saveMonitor.setAttribute('aria-label', label === '尚未存檔' ? '尚未存檔' : '最後存檔時間 ' + label.replace('最後 ', ''));
+    }
+
     function updateSaveStatus(text) {
+      const savedAt = new Date().toISOString();
+      persistRecord(lastSaveKey(), savedAt);
+      updateLastSaveTime(savedAt);
       dom.saveStatus.textContent = text + '，可離線使用';
       flashSaveMonitor();
       window.clearTimeout(updateSaveStatus.timer);
@@ -22071,6 +22125,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       entries = await loadEntries(config.cabinetId);
       persistRecord(storagePrefix + 'lastCabinetId', config.cabinetId);
       renderAll();
+      updateLastSaveTime(await loadLastSaveAt(config.cabinetId));
       showToast('已切換到 ' + config.cabinetName);
     }
 
@@ -23503,6 +23558,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       entries = await loadEntries(config.cabinetId);
       currentLocationId = '';
       renderAll();
+      updateLastSaveTime(await loadLastSaveAt(config.cabinetId));
     }
 
     dom.cabinetSvg.addEventListener('click', (event) => {
