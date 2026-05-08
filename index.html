@@ -23572,14 +23572,22 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       }
     });
 
-    // iOS 下載檔案時頁面會進入背景，導致關閉動畫的 setTimeout 被凍結、
-    // mobileActions 的 is-open class 無法被清掉，回來後畫面就像被隱形選單卡住。
-    // 頁面重新變成可見時強制清掉所有浮動面板的過渡狀態。
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) return;
+    // iOS 下載時可能觸發 bfcache（頁面暫存），DOM 狀態被凍結後原封不動恢復，
+    // 導致 mobileActions / adminPanel 的 is-open class 殘留，回來後畫面被隱形選單卡住。
+    // pageshow（含 bfcache 還原）與 visibilitychange（切換到背景再回來）都要處理。
+    function resetAllFloatingPanels() {
       window.clearTimeout(setMobileActionsOpen.closeTimer);
+      window.clearTimeout(closeAdminPanel.timer);
       dom.mobileActions.classList.remove('is-open', 'closing');
+      dom.adminPanel.classList.remove('show', 'closing');
+      dom.mobileActionsToggle.setAttribute('aria-expanded', 'false');
       syncSceneFocus();
+    }
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) resetAllFloatingPanels();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) resetAllFloatingPanels();
     });
 
     initApp();
