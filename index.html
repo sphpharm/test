@@ -335,11 +335,15 @@
 
     body.modal-open {
       overflow: hidden;
+      touch-action: none;
     }
 
     body.scene-focus .cabinet-panel,
     body.modal-open .cabinet-panel {
-      /* blur removed */
+      filter: blur(2.2px) saturate(.94) brightness(1.01);
+      opacity: .90;
+      transform: scale(1.006);
+      box-shadow: 0 18px 46px rgba(39, 36, 30, .105);
     }
 
     body.scene-focus .cabinet-panel::after,
@@ -22618,6 +22622,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     function exportCsv() {
+      closeTopFloatingSurface(); // 匯出前確保所有浮動面板已關閉
       const csv = createCsvExport();
       downloadText(
         csv.fileName,
@@ -22627,6 +22632,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     async function shareCsv() {
+      closeTopFloatingSurface(); // 分享前確保所有浮動面板已關閉
       const csv = createCsvExport();
       if (typeof File === 'undefined') {
         exportCsv();
@@ -23262,32 +23268,6 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       renderAdmin();
     }
 
-    // ═══════════════════════════════════════════════════════════════════
-    // 防止 bfcache 導致 modal / panel 殘留卡住畫面
-    //
-    // 問題：分頁進入 bfcache 時 setTimeout 會凍結，.closing/.show class
-    // 卡住，導致 backdrop overlay 殘留畫面。
-    // ═══════════════════════════════════════════════════════════════════
-    function resetAllFloatingPanels() {
-      window.clearTimeout(closeDrugModal.timer);
-      window.clearTimeout(closeTempDrugModal.timer);
-      window.clearTimeout(closeAdminPanel.timer);
-      window.clearTimeout(closeDrugList.timer);
-      if (setMobileActionsOpen.closeTimer) window.clearTimeout(setMobileActionsOpen.closeTimer);
-      if (setSearchOpen.closeTimer)         window.clearTimeout(setSearchOpen.closeTimer);
-
-      dom.modal.classList.remove('show', 'closing');
-      dom.tempDrugModal.classList.remove('show', 'closing');
-      dom.adminPanel.classList.remove('show', 'closing');
-      dom.mobileActions.classList.remove('is-open', 'closing');
-      dom.workPanel.classList.remove('closing');
-      dom.searchDock.classList.remove('is-open', 'closing');
-      document.body.classList.remove('modal-open');
-    }
-
-    window.addEventListener('pagehide', resetAllFloatingPanels);
-
-
     async function initApp() {
       updateRetroClock();
       setInterval(updateRetroClock, 15000);
@@ -23450,16 +23430,22 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       });
     }
 
-    dom.exportCsvBtn.addEventListener('click', exportCsv);
-    dom.shareCsvBtn.addEventListener('click', shareCsv);
+    dom.exportCsvBtn.addEventListener('click', () => {
+      closeMobileActions();
+      exportCsv();
+    });
+    dom.shareCsvBtn.addEventListener('click', () => {
+      closeMobileActions();
+      shareCsv();
+    });
     dom.clearInventoryBtn.addEventListener('click', clearInventoryData);
     dom.mobileExportCsvBtn.addEventListener('click', () => {
+      closeTopFloatingSurface();
       exportCsv();
-      closeMobileActions();
     });
     dom.mobileShareCsvBtn.addEventListener('click', () => {
+      closeTopFloatingSurface();
       shareCsv();
-      closeMobileActions();
     });
     dom.mobileClearInventoryBtn.addEventListener('click', () => {
       clearInventoryData();
