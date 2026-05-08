@@ -23206,6 +23206,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     function downloadText(fileName, text, type) {
+      downloadPending = true;
       const blob = new Blob([text], { type });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -23575,6 +23576,8 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     // iOS 下載時可能觸發 bfcache（頁面暫存），DOM 狀態被凍結後原封不動恢復，
     // 導致 mobileActions / adminPanel 的 is-open class 殘留，回來後畫面被隱形選單卡住。
     // pageshow（含 bfcache 還原）與 visibilitychange（切換到背景再回來）都要處理。
+    let downloadPending = false;
+
     function resetAllFloatingPanels() {
       window.clearTimeout(setMobileActionsOpen.closeTimer);
       window.clearTimeout(closeAdminPanel.timer);
@@ -23587,11 +23590,17 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       dom.mobileActionsToggle.setAttribute('aria-expanded', 'false');
       syncSceneFocus();
     }
+    // bfcache 還原時一律重置（頁面是從導覽快取恢復，非正常切換 app）
     window.addEventListener('pageshow', (e) => {
       if (e.persisted) resetAllFloatingPanels();
     });
+    // visibilitychange 只在確實有觸發下載時才重置，避免使用者切換 app 再回來時
+    // 意外關掉正在填寫的 modal 或 adminPanel
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) resetAllFloatingPanels();
+      if (!document.hidden && downloadPending) {
+        downloadPending = false;
+        resetAllFloatingPanels();
+      }
     });
 
     initApp();
