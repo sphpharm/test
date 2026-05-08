@@ -4,6 +4,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>智慧藥櫃離線盤點</title>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script>
+    (() => {
+      try {
+        if (localStorage.getItem('offline-med-cabinet-v1:theme') === 'dark') {
+          document.documentElement.classList.add('dark-theme');
+        }
+      } catch {
+        // Theme preference is optional; keep the default light theme if storage is unavailable.
+      }
+    })();
+  </script>
   <style>
     :root {
       --bg: #E9E9E7;
@@ -463,6 +474,46 @@
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .theme-toggle-btn {
+      width: 32px;
+      min-width: 32px;
+      height: 32px;
+      min-height: 32px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #5E5146;
+      background: #E7E3DD;
+      border: 1px solid rgba(255, 255, 255, .74);
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .86), 0 8px 18px rgba(17, 17, 17, .07);
+    }
+
+    .theme-toggle-btn:hover {
+      color: #332820;
+      background: #DDDAD3;
+    }
+
+    .theme-toggle-btn .theme-icon {
+      width: 17px;
+      height: 17px;
+      display: block;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .theme-toggle-btn .theme-icon-sun {
+      display: none;
+    }
+
+    html.dark-theme .theme-toggle-btn .theme-icon-moon {
+      display: none;
+    }
+
+    html.dark-theme .theme-toggle-btn .theme-icon-sun {
+      display: block;
     }
 
     .save-monitor.is-saving .save-icon {
@@ -1474,6 +1525,11 @@
       appearance: none;
     }
 
+    #qtyInput {
+      font-weight: 780;
+      font-variant-numeric: tabular-nums;
+    }
+
     #expiryInput:focus,
     #expiryInput:focus-visible {
       outline: none;
@@ -1501,6 +1557,11 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
       margin-top: 8px;
+      padding: 8px;
+      background: #E6E6E2;
+      border: 1px solid #D5D5D1;
+      border-radius: 16px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .68);
     }
 
     .calc button {
@@ -1508,6 +1569,8 @@
       color: var(--ink);
       background: #F4F4F2;
       border: 1px solid var(--line);
+      border-radius: 13px;
+      box-shadow: 0 6px 14px rgba(17, 17, 17, .06);
       font-weight: 700;
       touch-action: manipulation;
       -webkit-user-select: none;
@@ -1546,6 +1609,11 @@
       justify-content: space-between;
       gap: 10px;
       margin-top: 10px;
+      padding: 8px 10px;
+      background: #F7F7F5;
+      border: 1px solid rgba(213, 213, 209, .9);
+      border-radius: 14px;
+      box-shadow: 0 6px 14px rgba(17, 17, 17, .045);
     }
 
     .calc-total {
@@ -2179,12 +2247,24 @@
 
       .topbar-right {
         flex: 0 0 auto;
-        gap: 0;
+        gap: 5px;
+      }
+
+      .theme-toggle-btn {
+        width: 28px;
+        min-width: 28px;
+        height: 28px;
+        min-height: 28px;
+      }
+
+      .theme-toggle-btn .theme-icon {
+        width: 15px;
+        height: 15px;
       }
 
       .save-monitor {
         gap: 5px;
-        width: clamp(96px, 30vw, 118px);
+        width: clamp(86px, 26vw, 108px);
         height: 28px;
         padding: 0 7px;
         background: #DDDDD9;
@@ -2236,33 +2316,15 @@
         background: rgba(255, 255, 255, .92);
       }
 
-      .menu-icon,
-      .menu-icon::before,
-      .menu-icon::after {
-        display: block;
-        width: 20px;
-        height: 2px;
-        border-radius: 999px;
-        background: #5a5752;
-      }
-
       .menu-icon {
-        position: relative;
+        display: block;
+        width: 22px;
+        height: 22px;
+        color: #5a5752;
       }
 
-      .menu-icon::before,
-      .menu-icon::after {
-        content: "";
-        position: absolute;
-        left: 0;
-      }
-
-      .menu-icon::before {
-        top: -7px;
-      }
-
-      .menu-icon::after {
-        top: 7px;
+      .menu-icon path {
+        stroke: currentColor;
       }
 
       .mobile-actions-panel {
@@ -2775,7 +2837,7 @@
         padding: 8px;
         background: #E6E6E2;
         border: 1px solid #D5D5D1;
-        border-radius: 20px;
+        border-radius: 16px;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, .68);
       }
 
@@ -2896,6 +2958,642 @@
       .admin-row-actions {
         justify-content: flex-end;
       }
+    }
+
+    html.dark-theme {
+      color-scheme: dark;
+      --bg: #151615;
+      --panel: #20211F;
+      --ink: #F2F0EB;
+      --muted: #A9A39A;
+      --line: #3C3D39;
+      --line-strong: #505149;
+      --blue: #E7A34F;
+      --blue-dark: #F0B869;
+      --green: #A58B6D;
+      --amber: #E2A354;
+      --red: #B6534B;
+      --shadow: 0 22px 52px rgba(0, 0, 0, .34);
+    }
+
+    html.dark-theme body {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(226, 163, 84, .10), transparent 34%),
+        linear-gradient(180deg, #1C1D1B 0%, #121312 100%);
+    }
+
+    html.dark-theme .topbar {
+      background: rgba(28, 29, 27, .92);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .30);
+      backdrop-filter: blur(16px);
+    }
+
+    html.dark-theme .panel,
+    html.dark-theme .work-panel,
+    html.dark-theme .admin-panel,
+    html.dark-theme .modal,
+    html.dark-theme .search-panel,
+    html.dark-theme .cabinet-picker-menu {
+      color: var(--ink);
+      background: rgba(31, 32, 30, .96);
+      border-color: rgba(91, 88, 80, .78);
+      box-shadow: 0 22px 46px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .055);
+    }
+
+    html.dark-theme .cabinet-picker-btn,
+    html.dark-theme .save-monitor,
+    html.dark-theme .theme-toggle-btn {
+      color: #E8E0D2;
+      background: #2A2B28;
+      border-color: rgba(113, 109, 99, .68);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 8px 18px rgba(0, 0, 0, .22);
+    }
+
+    html.dark-theme .cabinet-picker-btn:hover,
+    html.dark-theme .theme-toggle-btn:hover {
+      color: #F0A64A;
+      background: #32332F;
+    }
+
+    html.dark-theme .save-icon {
+      color: #F0A64A;
+    }
+
+    html.dark-theme .button-secondary,
+    html.dark-theme .mobile-actions-panel .button-secondary,
+    html.dark-theme .modal-footer .button-secondary {
+      color: #EEE9DE;
+      background: #2A2B28;
+      border-color: rgba(94, 91, 83, .86);
+    }
+
+    html.dark-theme .button-secondary:hover,
+    html.dark-theme .mobile-actions-panel .button-secondary:hover {
+      background: #33342F;
+    }
+
+    html.dark-theme input,
+    html.dark-theme textarea,
+    html.dark-theme select,
+    html.dark-theme .modal input,
+    html.dark-theme .modal select,
+    html.dark-theme .modal textarea {
+      color: #F4F1EA;
+      background: #171816;
+      border-color: #4C4D46;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, .38);
+    }
+
+    html.dark-theme input::placeholder,
+    html.dark-theme textarea::placeholder {
+      color: #7D786F;
+    }
+
+    html.dark-theme .cabinet-panel {
+      background: rgba(32, 33, 31, .88);
+      border-color: rgba(84, 82, 75, .76);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .30);
+    }
+
+    html.dark-theme body.scene-focus .cabinet-panel,
+    html.dark-theme body.modal-open .cabinet-panel {
+      filter: blur(2.2px) saturate(.84) brightness(.78);
+      opacity: .78;
+      box-shadow: 0 22px 54px rgba(0, 0, 0, .42);
+    }
+
+    html.dark-theme body.scene-focus .cabinet-panel::after,
+    html.dark-theme body.modal-open .cabinet-panel::after {
+      background: rgba(12, 13, 12, .26);
+    }
+
+    html.dark-theme .cabinet-line {
+      fill: rgba(52, 53, 49, .90);
+      stroke: #8B887F;
+    }
+
+    html.dark-theme .cabinet-detail {
+      stroke: #A39E93;
+    }
+
+    html.dark-theme .cabinet-soft {
+      fill: rgba(43, 44, 41, .86);
+      stroke: #918C82;
+    }
+
+    html.dark-theme .drawer-label,
+    html.dark-theme .shelf-label {
+      fill: #EAE4D7;
+    }
+
+    html.dark-theme .hit-area {
+      fill: rgba(240, 166, 74, .035);
+      stroke: rgba(232, 224, 210, .14);
+    }
+
+    html.dark-theme .hit-area:hover,
+    html.dark-theme .hit-area.active {
+      fill: rgba(240, 166, 74, .16);
+      stroke: rgba(240, 166, 74, .64);
+    }
+
+    html.dark-theme .hit-area.done {
+      fill: rgba(240, 166, 74, .18);
+      stroke: rgba(240, 166, 74, .82);
+    }
+
+    html.dark-theme .svg-progress-frame {
+      fill: rgba(29, 30, 28, .84);
+      stroke: rgba(175, 169, 157, .46);
+    }
+
+    html.dark-theme .svg-progress-seg {
+      fill: rgba(98, 95, 87, .52);
+    }
+
+    html.dark-theme .svg-progress-seg.done {
+      fill: rgba(232, 153, 68, .86);
+      filter: drop-shadow(0 0 2px rgba(232, 153, 68, .32));
+    }
+
+    html.dark-theme .section-head,
+    html.dark-theme .modal-header,
+    html.dark-theme .modal-body {
+      background: #20211F;
+    }
+
+    html.dark-theme .drug-strip {
+      background: #181917;
+    }
+
+    html.dark-theme .drug-card {
+      color: #F2F0EB;
+      background: #252622;
+      border-color: #484941;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, .26);
+    }
+
+    html.dark-theme .drug-card:hover {
+      background: #2C2D29;
+      border-color: #5A5A52;
+    }
+
+    html.dark-theme .drug-card.done {
+      color: #F1E8DC;
+      background: #2C2923;
+      border-color: rgba(221, 148, 68, .62);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .22);
+    }
+
+    html.dark-theme .drug-card.partial {
+      background: #2B2524;
+      border-color: rgba(190, 87, 80, .60);
+    }
+
+    html.dark-theme .drug-meta,
+    html.dark-theme .drug-card.done .drug-meta,
+    html.dark-theme .drug-card.partial .drug-meta,
+    html.dark-theme .section-head p,
+    html.dark-theme .modal-header p,
+    html.dark-theme .progress {
+      color: var(--muted);
+    }
+
+    html.dark-theme .add-drug-card {
+      color: #E5DDCF;
+      background: rgba(255, 255, 255, .03);
+      border-color: rgba(232, 224, 210, .22);
+    }
+
+    html.dark-theme .add-drug-card:hover {
+      background: rgba(240, 166, 74, .08);
+      border-color: rgba(240, 166, 74, .35);
+    }
+
+    html.dark-theme .status-pill,
+    html.dark-theme .cabinet-option-status {
+      color: #BDB5A8;
+      background: #33332E;
+    }
+
+    html.dark-theme .cabinet-option {
+      color: #EDE7DC;
+    }
+
+    html.dark-theme .cabinet-option:hover {
+      color: #FFF7EA;
+      background: #30312D;
+    }
+
+    html.dark-theme .cabinet-option.is-current {
+      color: #24160B;
+      background: #E7A34F;
+      border-color: rgba(255, 206, 140, .44);
+    }
+
+    html.dark-theme .cabinet-option.has-saved .cabinet-option-status {
+      color: #F4B66A;
+      background: rgba(231, 163, 79, .16);
+    }
+
+    html.dark-theme .calc,
+    html.dark-theme .calc-history,
+    html.dark-theme .search-results {
+      background: #1B1C19;
+      border-color: #45463F;
+    }
+
+    html.dark-theme .calc button {
+      color: #F2EFE7;
+      background: #2A2B27;
+      border-color: #44453E;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, .22);
+    }
+
+    html.dark-theme .calc button:hover {
+      background: #33342F;
+    }
+
+    html.dark-theme .calc button[data-key="*"],
+    html.dark-theme .calc button[data-key="-"],
+    html.dark-theme .calc button[data-key="+"] {
+      color: #EEDCC8;
+      background: #493628;
+      border-color: rgba(157, 111, 72, .46);
+    }
+
+    html.dark-theme .calc button[data-key="clear"] {
+      color: #E7DFD3;
+      background: #3A3B35;
+    }
+
+    html.dark-theme .calc button[data-key="="] {
+      color: #FFE5C3;
+      background: #6C482F;
+      border-color: rgba(183, 128, 79, .52);
+    }
+
+    html.dark-theme .calc-history-details summary,
+    html.dark-theme .calc-line,
+    html.dark-theme .search-result,
+    html.dark-theme .admin-card,
+    html.dark-theme .drug-row {
+      color: #EDE7DC;
+      background: #252622;
+      border-color: #44453E;
+    }
+
+    html.dark-theme .search-toggle,
+    html.dark-theme .mobile-actions-toggle {
+      color: #F1B760;
+      background: rgba(35, 36, 33, .94);
+      border-color: rgba(116, 111, 100, .70);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, .32), inset 0 0 0 1px rgba(255, 255, 255, .055);
+    }
+
+    html.dark-theme .search-form,
+    html.dark-theme .search-scope label {
+      color: #EDE7DC;
+      background: #262723;
+      border-color: #45463F;
+    }
+
+    html.dark-theme .mobile-actions-panel button {
+      color: #17140F;
+      background: #E7A34F;
+      border-color: rgba(255, 206, 140, .42);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, .28);
+    }
+
+    html.dark-theme .mobile-actions-panel .button-danger,
+    html.dark-theme .button-danger {
+      color: #FFF4EF;
+      background: #A94E46;
+      border-color: rgba(189, 93, 83, .72);
+    }
+
+    html.dark-theme .toast {
+      color: #F4EFE7;
+      background: rgba(24, 25, 23, .96);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .36);
+    }
+
+    html.dark-theme .expiry-field.expiry-near #expiryInput {
+      color: #FFDAD6;
+      background: #311E1D;
+      border-color: rgba(207, 92, 83, .72);
+      box-shadow: inset 0 0 0 1px rgba(207, 92, 83, .22), 0 0 0 3px rgba(207, 92, 83, .10);
+    }
+
+    html.dark-theme #drugModal .modal,
+    html.dark-theme #tempDrugModal .modal {
+      background: #1A1B18;
+      border: 1px solid rgba(92, 88, 78, .74);
+      box-shadow: 0 26px 58px rgba(0, 0, 0, .48), inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    html.dark-theme #drugModal .modal-header,
+    html.dark-theme #tempDrugModal .modal-header {
+      background: #252620;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .045);
+    }
+
+    html.dark-theme #drugModal .modal-body,
+    html.dark-theme #tempDrugModal .modal-body {
+      background: #181916;
+    }
+
+    html.dark-theme #drugModal .modal-footer,
+    html.dark-theme #tempDrugModal .modal-footer {
+      background: #24251F;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045);
+    }
+
+    html.dark-theme .sheet-handle {
+      background: rgba(232, 224, 210, .22);
+    }
+
+    html.dark-theme .modal-header h3 {
+      color: #F4EFE6;
+    }
+
+    html.dark-theme .modal-body .field label,
+    html.dark-theme .field label {
+      color: #C9C0B2;
+    }
+
+    html.dark-theme .field-label-row {
+      color: #C9C0B2;
+    }
+
+    html.dark-theme .expiry-warning {
+      color: #FFDAD6;
+      background: rgba(186, 78, 70, .20);
+      border-color: rgba(226, 111, 100, .35);
+    }
+
+    html.dark-theme .expiry-control {
+      background: #11120F;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .20);
+    }
+
+    html.dark-theme #expiryInput,
+    html.dark-theme #qtyInput,
+    html.dark-theme #tempSlotInput,
+    html.dark-theme #tempDrugNameInput {
+      color: #F6F0E6;
+      background: #11120F;
+      border-color: rgba(98, 94, 84, .86);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035), inset 0 -1px 0 rgba(0, 0, 0, .42);
+    }
+
+    html.dark-theme #qtyInput {
+      color: #F2B669;
+      background: #0F100E;
+      border-color: rgba(226, 163, 84, .42);
+      font-weight: 780;
+      box-shadow: inset 0 0 0 1px rgba(226, 163, 84, .10), 0 8px 18px rgba(0, 0, 0, .18);
+    }
+
+    html.dark-theme #expiryInput:focus,
+    html.dark-theme #qtyInput:focus,
+    html.dark-theme #tempSlotInput:focus,
+    html.dark-theme #tempDrugNameInput:focus {
+      border-color: rgba(240, 180, 105, .72);
+      box-shadow: inset 0 0 0 1px rgba(240, 180, 105, .22), 0 0 0 3px rgba(240, 180, 105, .12);
+    }
+
+    html.dark-theme #tempSlotInput::placeholder,
+    html.dark-theme #tempDrugNameInput::placeholder,
+    html.dark-theme #expiryInput::placeholder,
+    html.dark-theme #qtyInput::placeholder {
+      color: #777268;
+    }
+
+    html.dark-theme .qty-back {
+      color: #22160E;
+      background: #D99953;
+      border-color: rgba(244, 184, 112, .54);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .24);
+    }
+
+    html.dark-theme .calc {
+      padding: 8px;
+      background: #141512;
+      border: 1px solid rgba(78, 76, 68, .78);
+      border-radius: 16px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    }
+
+    html.dark-theme .calc button {
+      color: #ECE6DA;
+      background: #262722;
+      border-color: rgba(84, 82, 74, .86);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    html.dark-theme .calc button:hover {
+      background: #30312B;
+    }
+
+    html.dark-theme .calc button[data-key="*"],
+    html.dark-theme .calc button[data-key="-"],
+    html.dark-theme .calc button[data-key="+"] {
+      color: #EEDCC8;
+      background: #493628;
+      border-color: rgba(157, 111, 72, .46);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 229, 196, .055);
+    }
+
+    html.dark-theme .calc button[data-key="*"]:hover,
+    html.dark-theme .calc button[data-key="-"]:hover,
+    html.dark-theme .calc button[data-key="+"]:hover {
+      color: #FFE8CD;
+      background: #563F2F;
+      border-color: rgba(181, 129, 82, .54);
+    }
+
+    html.dark-theme .calc button[data-key="clear"] {
+      color: #EFE8DB;
+      background: #3B3A33;
+      border-color: rgba(92, 90, 82, .90);
+    }
+
+    html.dark-theme .calc button[data-key="="] {
+      color: #FFE5C3;
+      background: #6C482F;
+      border-color: rgba(183, 128, 79, .52);
+      box-shadow: 0 9px 18px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 229, 196, .07);
+    }
+
+    html.dark-theme .calc button[data-key="="]:hover {
+      background: #795238;
+      border-color: rgba(199, 144, 91, .58);
+    }
+
+    html.dark-theme .calc-actions {
+      padding: 8px 10px;
+      background: #21221D;
+      border: 1px solid rgba(76, 74, 66, .82);
+      border-radius: 14px;
+    }
+
+    html.dark-theme .calc-total {
+      color: #F0B76C;
+    }
+
+    html.dark-theme .calc-add-btn {
+      color: #21150D;
+      background: #D89B55;
+      border-color: rgba(244, 190, 120, .46);
+    }
+
+    html.dark-theme .calc-history-details {
+      background: #1D1E1A;
+      border-color: rgba(76, 74, 66, .82);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, .22);
+    }
+
+    html.dark-theme .calc-history-details summary {
+      color: #EEE7D9;
+      background: #252620;
+    }
+
+    html.dark-theme .calc-history-toggle {
+      color: #F0B76C;
+      background: rgba(240, 183, 108, .14);
+    }
+
+    html.dark-theme .calc-latest {
+      color: #F2EDE2;
+    }
+
+    html.dark-theme .calc-line {
+      color: #EAE3D6;
+      background: #23241F;
+      border-color: rgba(76, 74, 66, .80);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+    }
+
+    html.dark-theme .calc-line-delete {
+      color: #F1E9DD;
+      background: #383931;
+      border-color: rgba(83, 81, 73, .92);
+    }
+
+    html.dark-theme .not-found-btn {
+      color: #EDE6D8;
+      background: #2A2B26;
+      border-color: rgba(88, 85, 76, .88);
+      box-shadow: 0 9px 18px rgba(0, 0, 0, .22);
+    }
+
+    html.dark-theme .not-found-btn:hover {
+      color: #FFF3E0;
+      background: #32332D;
+    }
+
+    html.dark-theme .not-found-icon {
+      color: #E7A34F;
+    }
+
+    html.dark-theme #deleteEntryBtn,
+    html.dark-theme #tempDrugCancelBtn {
+      color: #EAE3D6;
+      background: #2B2C27;
+      border-color: rgba(88, 85, 76, .88);
+    }
+
+    html.dark-theme #saveEntryBtn,
+    html.dark-theme #tempDrugAddBtn {
+      color: #21150D;
+      background: #E7A34F;
+      border-color: rgba(255, 204, 134, .56);
+      box-shadow: 0 11px 22px rgba(0, 0, 0, .28);
+    }
+
+    html.dark-theme #saveEntryBtn:hover,
+    html.dark-theme #tempDrugAddBtn:hover {
+      background: #F0B76C;
+    }
+
+    html.dark-theme .icon-action-btn {
+      color: #24160B;
+      background: #E7A34F;
+      border-color: rgba(255, 203, 132, .62);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .22);
+    }
+
+    html.dark-theme .top-actions button,
+    html.dark-theme .mobile-actions-panel button {
+      color: #ECE5D8;
+      background: #292A25;
+      border-color: rgba(82, 80, 72, .86);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    html.dark-theme .top-actions button:hover,
+    html.dark-theme .mobile-actions-panel button:hover {
+      background: #32332D;
+    }
+
+    html.dark-theme .mobile-actions-panel {
+      background: rgba(29, 30, 27, .96);
+      border-color: rgba(86, 83, 74, .82);
+      box-shadow: 0 22px 46px rgba(0, 0, 0, .40), inset 0 1px 0 rgba(255, 255, 255, .05);
+    }
+
+    html.dark-theme .mobile-actions-panel button:first-child,
+    html.dark-theme .top-actions #shareCsvBtn {
+      color: #22160E;
+      background: #E7A34F;
+      border-color: rgba(255, 204, 134, .56);
+      box-shadow: 0 13px 26px rgba(0, 0, 0, .32), 0 0 0 1px rgba(255, 204, 134, .08);
+    }
+
+    html.dark-theme .mobile-actions-panel button:first-child:hover,
+    html.dark-theme .top-actions #shareCsvBtn:hover {
+      background: #F0B76C;
+    }
+
+    html.dark-theme .mobile-actions-panel .button-secondary,
+    html.dark-theme .top-actions .button-secondary {
+      color: #ECE5D8;
+      background: #292A25;
+      border-color: rgba(82, 80, 72, .86);
+    }
+
+    html.dark-theme .mobile-actions-panel .button-danger,
+    html.dark-theme .top-actions .button-danger,
+    html.dark-theme .button-danger {
+      color: #FBEDE8;
+      background: #743B35;
+      border-color: rgba(177, 84, 74, .68);
+    }
+
+    html.dark-theme .mobile-actions-panel .button-danger:hover,
+    html.dark-theme .top-actions .button-danger:hover,
+    html.dark-theme .button-danger:hover {
+      background: #85453E;
+    }
+
+    html.dark-theme .mobile-actions-panel .action-icon {
+      width: 24px;
+      height: 24px;
+      color: currentColor;
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 999px;
+    }
+
+    html.dark-theme .mobile-actions-panel button:first-child .action-icon {
+      background: rgba(255, 255, 255, .22);
+      border-color: rgba(255, 255, 255, .20);
+    }
+
+    html.dark-theme .menu-icon {
+      color: #F1B760;
     }
   </style>
 </head>
@@ -21207,6 +21905,14 @@
       </select>
       </div>
       <div class="topbar-right">
+        <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="切換深色模式" aria-pressed="false" title="深色模式">
+          <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 22q-4.12 0-7.06-2.94Q2 16.13 2 12q0-3.55 2.19-6.29Q6.38 2.98 9.75 2.25q.35-.08.63.19.27.26.22.64-.05.45-.07.9-.03.45-.03.92 0 3.58 2.51 6.09 2.52 2.51 6.09 2.51.48 0 .93-.03.45-.02.9-.07.38-.05.64.22.27.28.18.63-.72 3.37-3.46 5.56Q15.55 22 12 22Z"></path>
+          </svg>
+          <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M11 5V2h2v3h-2Zm0 17v-3h2v3h-2Zm8-9v-2h3v2h-3ZM2 13v-2h3v2H2Zm15.65-6.25-1.4-1.4 2.1-2.15 1.45 1.45-2.15 2.1ZM5.65 20.8 4.2 19.35l2.15-2.1 1.4 1.4-2.1 2.15Zm12.7 0-2.1-2.15 1.4-1.4 2.15 2.1-1.45 1.45ZM6.35 6.75 4.2 4.65 5.65 3.2l2.1 2.15-1.4 1.4ZM12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18Zm0-2q1.65 0 2.83-1.17Q16 13.65 16 12t-1.17-2.83Q13.65 8 12 8T9.17 9.17Q8 10.35 8 12t1.17 2.83Q10.35 16 12 16Z"></path>
+          </svg>
+        </button>
         <div id="saveMonitor" class="save-monitor" aria-live="polite" aria-label="儲存狀態">
           <span class="save-icon" aria-hidden="true">
             <svg viewBox="0 -960 960 960" fill="currentColor">
@@ -21226,7 +21932,9 @@
 
     <div class="mobile-actions" id="mobileActions">
       <button id="mobileActionsToggle" class="mobile-actions-toggle" type="button" aria-label="開啟功能選單" aria-expanded="false">
-        <span class="menu-icon" aria-hidden="true"></span>
+        <svg class="menu-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 7h14M5 12h14M5 17h14" stroke-width="2.2" stroke-linecap="round"></path>
+        </svg>
       </button>
       <div class="mobile-actions-panel">
         <button id="mobileShareCsvBtn" title="用手機分享盤點 CSV">
@@ -21801,13 +22509,13 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
             </summary>
             <div id="calcHistoryList" class="calc-history" aria-label="數量計算明細"></div>
           </details>
-          <div class="qty-control">
-            <input id="qtyInput" inputmode="none" autocomplete="off" readonly="" placeholder="使用下方按鍵輸入或加總">
-            <button id="qtyBackBtn" class="qty-back" type="button" aria-label="刪除最後一個字">⌫</button>
-          </div>
           <div class="calc-actions">
             <span id="calcTotalLabel" class="calc-total">目前總量：0</span>
             <button id="calcAddLineBtn" class="calc-add-btn button-secondary" type="button">加入明細</button>
+          </div>
+          <div class="qty-control">
+            <input id="qtyInput" inputmode="none" autocomplete="off" readonly="" placeholder="使用下方按鍵輸入或加總">
+            <button id="qtyBackBtn" class="qty-back" type="button" aria-label="刪除最後一個字">⌫</button>
           </div>
           <div class="calc" aria-label="數量加總計算機">
             <button data-key="7">7</button>
@@ -21897,6 +22605,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     const embeddedCabinetCollection = parseEmbeddedJson('cabinet-collection', []);
     const embeddedItemMaster = parseEmbeddedJson('item-master', {});
     const storagePrefix = 'offline-med-cabinet-v1:';
+    const themeStorageKey = storagePrefix + 'theme';
     const fixedLocations = [
       { id: 'shelf-1', name: '層架 1' },
       { id: 'shelf-2', name: '層架 2' },
@@ -21933,6 +22642,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       saveStatus: $('#saveStatus'),
       saveMonitor: $('#saveMonitor'),
       saveTimeText: $('#saveTimeText'),
+      themeToggleBtn: $('#themeToggleBtn'),
       cabinetSvg: $('#cabinetSvg'),
       drawerDetails: $('#drawerDetails'),
       shelfDetails: $('#shelfDetails'),
@@ -22445,6 +23155,26 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       const minutes = String(now.getMinutes()).padStart(2, '0');
       dom.retroClockTime.innerHTML = hours + '<span class="clock-colon">:</span>' + minutes;
       dom.retroClockTime.parentElement?.setAttribute('aria-label', '現在時間 ' + hours + ':' + minutes);
+    }
+
+    function applyTheme(theme) {
+      const isDark = theme === 'dark';
+      document.documentElement.classList.toggle('dark-theme', isDark);
+      dom.themeToggleBtn?.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      dom.themeToggleBtn?.setAttribute('aria-label', isDark ? '切換淺色模式' : '切換深色模式');
+      dom.themeToggleBtn?.setAttribute('title', isDark ? '淺色模式' : '深色模式');
+    }
+
+    function loadThemePreference() {
+      const savedTheme = legacyGet(themeStorageKey);
+      applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+    }
+
+    function toggleTheme() {
+      const nextTheme = document.documentElement.classList.contains('dark-theme') ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      legacySet(themeStorageKey, nextTheme);
+      dbSet(themeStorageKey, nextTheme).catch(() => {});
     }
 
     function setPageScrollLocked(locked) {
@@ -24045,6 +24775,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     async function initApp() {
+      loadThemePreference();
       updateRetroClock();
       setInterval(updateRetroClock, 15000);
       itemMaster = await loadItemMaster();
@@ -24175,6 +24906,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
 
     document.addEventListener('click', consumeOutsideFloatingClick, true);
 
+    dom.themeToggleBtn.addEventListener('click', toggleTheme);
     dom.cabinetPickerBtn.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
