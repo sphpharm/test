@@ -22622,7 +22622,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     function exportCsv() {
-      closeTopFloatingSurface(); // 匯出前確保所有浮動面板已關閉
+      closeTopFloatingSurface?.();
       const csv = createCsvExport();
       downloadText(
         csv.fileName,
@@ -22632,7 +22632,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     async function shareCsv() {
-      closeTopFloatingSurface(); // 分享前確保所有浮動面板已關閉
+      closeTopFloatingSurface?.();
       const csv = createCsvExport();
       if (typeof File === 'undefined') {
         exportCsv();
@@ -23430,22 +23430,16 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       });
     }
 
-    dom.exportCsvBtn.addEventListener('click', () => {
-      closeMobileActions();
-      exportCsv();
-    });
-    dom.shareCsvBtn.addEventListener('click', () => {
-      closeMobileActions();
-      shareCsv();
-    });
+    dom.exportCsvBtn.addEventListener('click', exportCsv);
+    dom.shareCsvBtn.addEventListener('click', shareCsv);
     dom.clearInventoryBtn.addEventListener('click', clearInventoryData);
     dom.mobileExportCsvBtn.addEventListener('click', () => {
-      closeTopFloatingSurface();
       exportCsv();
+      closeMobileActions();
     });
     dom.mobileShareCsvBtn.addEventListener('click', () => {
-      closeTopFloatingSurface();
       shareCsv();
+      closeMobileActions();
     });
     dom.mobileClearInventoryBtn.addEventListener('click', () => {
       clearInventoryData();
