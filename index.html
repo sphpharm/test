@@ -23265,6 +23265,32 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       renderAdmin();
     }
 
+    // ═══════════════════════════════════════════════════════════════════
+    // 防止 bfcache 導致 modal / panel 殘留卡住畫面
+    //
+    // 問題：分頁進入 bfcache 時 setTimeout 會凍結，.closing/.show class
+    // 卡住，導致 backdrop overlay 殘留畫面。
+    // ═══════════════════════════════════════════════════════════════════
+    function resetAllFloatingPanels() {
+      window.clearTimeout(closeDrugModal.timer);
+      window.clearTimeout(closeTempDrugModal.timer);
+      window.clearTimeout(closeAdminPanel.timer);
+      window.clearTimeout(closeDrugList.timer);
+      if (setMobileActionsOpen.closeTimer) window.clearTimeout(setMobileActionsOpen.closeTimer);
+      if (setSearchOpen.closeTimer)         window.clearTimeout(setSearchOpen.closeTimer);
+
+      dom.modal.classList.remove('show', 'closing');
+      dom.tempDrugModal.classList.remove('show', 'closing');
+      dom.adminPanel.classList.remove('show', 'closing');
+      dom.mobileActions.classList.remove('is-open', 'closing');
+      dom.workPanel.classList.remove('closing');
+      dom.searchDock.classList.remove('is-open', 'closing');
+      document.body.classList.remove('modal-open');
+    }
+
+    window.addEventListener('pagehide', resetAllFloatingPanels);
+
+
     async function initApp() {
       updateRetroClock();
       setInterval(updateRetroClock, 15000);
