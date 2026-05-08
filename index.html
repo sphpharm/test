@@ -23578,8 +23578,12 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     function resetAllFloatingPanels() {
       window.clearTimeout(setMobileActionsOpen.closeTimer);
       window.clearTimeout(closeAdminPanel.timer);
+      window.clearTimeout(closeDrugModal.timer);
+      window.clearTimeout(closeTempDrugModal.timer);
       dom.mobileActions.classList.remove('is-open', 'closing');
       dom.adminPanel.classList.remove('show', 'closing');
+      dom.modal.classList.remove('show', 'closing');
+      dom.tempDrugModal.classList.remove('show', 'closing');
       dom.mobileActionsToggle.setAttribute('aria-expanded', 'false');
       syncSceneFocus();
     }
