@@ -208,6 +208,176 @@
       width: 100%;
     }
 
+    .cabinet-native-select {
+      display: none;
+    }
+
+    .cabinet-picker {
+      position: relative;
+      width: 100%;
+    }
+
+    .cabinet-picker-btn {
+      width: 100%;
+      height: 32px;
+      min-height: 32px;
+      padding: 0 8px 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #565149;
+      background: #EEECE7;
+      border: 1px solid rgba(183, 177, 166, .76);
+      border-radius: 10px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .88), 0 8px 18px rgba(17, 17, 17, .06);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .cabinet-picker-btn:hover,
+    .cabinet-picker-btn:active {
+      color: #4E4942;
+      background: #E8E5DF;
+    }
+
+    .cabinet-picker-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .cabinet-picker-mark {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      color: #8A8178;
+      transition: transform .18s ease;
+    }
+
+    .cabinet-picker.is-open .cabinet-picker-mark {
+      transform: rotate(180deg);
+    }
+
+    .cabinet-picker-menu {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 9px);
+      z-index: 28;
+      width: min(420px, calc(100vw - 24px));
+      max-height: min(420px, calc(100dvh - 92px));
+      padding: 8px;
+      overflow-y: auto;
+      visibility: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-6px) scale(.98);
+      transform-origin: top center;
+      color: #433E38;
+      background: rgba(246, 245, 242, .96);
+      border: 1px solid rgba(190, 184, 174, .70);
+      border-radius: 16px;
+      box-shadow: 0 18px 34px rgba(45, 39, 32, .16), inset 0 1px 0 rgba(255, 255, 255, .88);
+      backdrop-filter: blur(14px);
+      transition: opacity .18s ease, transform .22s cubic-bezier(.18, .98, .24, 1.04), visibility 0s linear .18s;
+    }
+
+    .cabinet-picker.is-open .cabinet-picker-menu {
+      visibility: visible;
+      pointer-events: auto;
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+      transition-delay: 0s;
+    }
+
+    .cabinet-option {
+      width: 100%;
+      min-height: 48px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #4D4841;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      box-shadow: none;
+      text-align: left;
+    }
+
+    .cabinet-option:hover {
+      color: #3F3932;
+      background: #EDEAE4;
+    }
+
+    .cabinet-option:active {
+      transform: translateY(1px);
+    }
+
+    .cabinet-option + .cabinet-option {
+      margin-top: 3px;
+    }
+
+    .cabinet-option-name {
+      min-width: 0;
+      overflow: visible;
+      text-overflow: clip;
+      white-space: normal;
+      line-height: 1.25;
+      font-weight: 720;
+    }
+
+    .cabinet-option-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex: 0 0 auto;
+      padding: 3px 7px;
+      color: #847A70;
+      background: #E8E5DF;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 720;
+      line-height: 1;
+    }
+
+    .cabinet-option-status::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #C7C0B6;
+    }
+
+    .cabinet-option.has-saved .cabinet-option-status {
+      color: #8E4F18;
+      background: #F4E0C4;
+    }
+
+    .cabinet-option.has-saved .cabinet-option-status::before {
+      background: #E08A30;
+      box-shadow: 0 0 0 3px rgba(224, 138, 48, .14);
+    }
+
+    .cabinet-option.is-current {
+      color: #26180C;
+      background: #F0A64A;
+      border-color: rgba(204, 119, 28, .50);
+      box-shadow: 0 10px 18px rgba(219, 132, 37, .16), inset 0 1px 0 rgba(255, 255, 255, .42);
+    }
+
+    .cabinet-option.is-current:hover {
+      background: #F0A64A;
+    }
+
+    .cabinet-option.is-current .cabinet-option-status {
+      color: #2C2118;
+      background: rgba(255, 255, 255, .46);
+    }
+
     .topbar-right {
       display: flex;
       align-items: center;
@@ -1886,8 +2056,52 @@
 
       .cabinet-switcher {
         left: 72px;
-        width: clamp(108px, 34vw, 142px);
+        width: clamp(112px, 35vw, 148px);
         transform: translateY(-50%);
+      }
+
+      .cabinet-picker-btn {
+        height: 28px;
+        min-height: 28px;
+        padding: 0 7px 0 8px;
+        border-radius: 9px;
+        font-size: 12px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .84), 0 7px 16px rgba(17, 17, 17, .06);
+      }
+
+      .cabinet-picker-mark {
+        width: 16px;
+        height: 16px;
+      }
+
+      .cabinet-picker-menu {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        top: 58px;
+        width: auto;
+        max-height: min(392px, calc(100dvh - 88px));
+        transform: translateY(-6px) scale(.98);
+        transform-origin: top left;
+      }
+
+      .cabinet-picker.is-open .cabinet-picker-menu {
+        transform: translateY(0) scale(1);
+      }
+
+      .cabinet-option {
+        min-height: 46px;
+        padding: 9px 10px;
+        gap: 8px;
+      }
+
+      .cabinet-option-name {
+        font-size: 13px;
+        line-height: 1.24;
+      }
+
+      .cabinet-option-status {
+        font-size: 10.5px;
       }
 
       .cabinet-switch {
@@ -2030,6 +2244,10 @@
       }
 
       .mobile-actions-panel button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         min-height: 44px;
         border-radius: 999px;
         color: #fff;
@@ -2040,6 +2258,21 @@
         transform: translateY(8px);
         transition: opacity .22s ease, transform .32s cubic-bezier(.18, .98, .24, 1.12);
         transition-delay: 0s;
+      }
+
+      .mobile-actions-panel .action-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        flex: 0 0 auto;
+      }
+
+      .mobile-actions-panel .action-icon svg {
+        display: block;
+        width: 20px;
+        height: 20px;
       }
 
       .mobile-actions.is-open .mobile-actions-panel button {
@@ -20846,7 +21079,16 @@
         <span id="retroClockTime">00<span class="clock-colon">:</span>09</span>
       </div>
       <div class="cabinet-switcher">
-        <select id="cabinetSelect" class="cabinet-switch" aria-label="切換調劑台">
+        <div id="cabinetPicker" class="cabinet-picker">
+          <button id="cabinetPickerBtn" class="cabinet-picker-btn" type="button" aria-label="切換調劑台" aria-haspopup="listbox" aria-expanded="false">
+            <span id="cabinetPickerLabel" class="cabinet-picker-label">選擇調劑台</span>
+            <svg class="cabinet-picker-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 10l5 5 5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <div id="cabinetPickerMenu" class="cabinet-picker-menu" role="listbox" aria-label="調劑台清單"></div>
+        </div>
+        <select id="cabinetSelect" class="cabinet-switch cabinet-native-select" aria-label="切換調劑台" tabindex="-1" aria-hidden="true">
         <option value="er-1">ER 調劑台 1</option>
       
         <option value="er-2">ER 調劑台 2</option>
@@ -20927,10 +21169,38 @@
         <span class="menu-icon" aria-hidden="true"></span>
       </button>
       <div class="mobile-actions-panel">
-        <button id="mobileShareCsvBtn" title="用手機分享盤點 CSV">分享 CSV</button>
-        <button id="mobileExportCsvBtn" class="button-secondary" title="匯出藥品名稱、數量、效期 CSV">匯出 CSV</button>
-        <button id="mobileClearInventoryBtn" class="button-danger" title="清除本機已儲存的盤點數量與效期">清除資料</button>
-        <button id="mobileAdminToggleBtn" class="button-secondary" title="切換後台設定">後台設定</button>
+        <button id="mobileShareCsvBtn" title="用手機分享盤點 CSV">
+          <span class="action-icon" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M280-360v-240q0-33 23.5-56.5T360-680h326L583-783l57-57 200 200-200 200-57-56 103-104H360v240h-80Zm-80 240q-33 0-56.5-23.5T120-200v-600h80v600h480v-160h80v160q0 33-23.5 56.5T680-120H200Z"></path>
+            </svg>
+          </span>
+          <span>分享 CSV</span>
+        </button>
+        <button id="mobileExportCsvBtn" class="button-secondary" title="匯出藥品名稱、數量、效期 CSV">
+          <span class="action-icon" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path d="m480-240 160-160-56-56-64 64v-168h-80v168l-64-64-56 56 160 160ZM200-640v440h560v-440H200Zm0 520q-33 0-56.5-23.5T120-200v-499q0-14 4.5-27t13.5-24l50-61q11-14 27.5-21.5T250-840h460q18 0 34.5 7.5T772-811l50 61q9 11 13.5 24t4.5 27v499q0 33-23.5 56.5T760-120H200Zm16-600h528l-34-40H250l-34 40Zm264 300Z"></path>
+            </svg>
+          </span>
+          <span>匯出 CSV</span>
+        </button>
+        <button id="mobileAdminToggleBtn" class="button-secondary" title="切換後台設定">
+          <span class="action-icon" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M440-520v-280h440v280H440ZM80-160v-280h400v280H80Zm0-360v-280h280v280H80Zm440-80h280v-120H520v120ZM160-240h240v-120H160v120Zm0-360h120v-120H160v120Zm360 0ZM400-360ZM280-600ZM680-80l-12-60q-12-5-22.5-10.5T624-164l-58 18-40-68 46-40q-2-13-2-26t2-26l-46-40 40-68 58 18q11-8 21.5-13.5T668-420l12-60h80l12 60q12 5 22.5 10.5T816-396l58-18 40 68-46 40q2 13 2 26t-2 26l46 40-40 68-58-18q-11 8-21.5 13.5T772-140l-12 60h-80Zm96.5-143.5Q800-247 800-280t-23.5-56.5Q753-360 720-360t-56.5 23.5Q640-313 640-280t23.5 56.5Q687-200 720-200t56.5-23.5Z"></path>
+            </svg>
+          </span>
+          <span>後台設定</span>
+        </button>
+        <button id="mobileClearInventoryBtn" class="button-danger" title="清除本機已儲存的盤點數量與效期">
+          <span class="action-icon" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"></path>
+            </svg>
+          </span>
+          <span>清除資料</span>
+        </button>
       </div>
     </div>
 
@@ -21593,6 +21863,8 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     let tempDrugTargetLocationId = '';
     let searchMatches = [];
     let entries = {};
+    let cabinetSaveStates = {};
+    let cabinetStateRefreshId = 0;
 
     const $ = (selector) => document.querySelector(selector);
     const dom = {
@@ -21618,6 +21890,10 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       searchCloseBtn: $('#searchCloseBtn'),
       drugSearchInput: $('#drugSearchInput'),
       searchResults: $('#searchResults'),
+      cabinetPicker: $('#cabinetPicker'),
+      cabinetPickerBtn: $('#cabinetPickerBtn'),
+      cabinetPickerLabel: $('#cabinetPickerLabel'),
+      cabinetPickerMenu: $('#cabinetPickerMenu'),
       cabinetSelect: $('#cabinetSelect'),
       mobileCabinetSelect: $('#mobileCabinetSelect'),
       retroClockTime: $('#retroClockTime'),
@@ -21922,6 +22198,10 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
 
     function saveEntries(options = {}) {
       persistRecord(storagePrefix + 'entries:' + config.cabinetId, entries);
+      updateCabinetPickerState(config.cabinetId, {
+        hasData: hasInventoryData(entries),
+        savedAt: cabinetSaveStates[config.cabinetId]?.savedAt || ''
+      });
       if (!options.quiet) updateSaveStatus('盤點資料已暫存');
     }
 
@@ -21953,6 +22233,10 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       const savedAt = new Date().toISOString();
       persistRecord(lastSaveKey(), savedAt);
       updateLastSaveTime(savedAt);
+      updateCabinetPickerState(config.cabinetId, {
+        hasData: hasInventoryData(entries),
+        savedAt
+      });
       dom.saveStatus.textContent = text + '，可離線使用';
       flashSaveMonitor();
       window.clearTimeout(updateSaveStatus.timer);
@@ -21975,6 +22259,93 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       return config.locations.find((location) => location.id === locationId);
     }
 
+    function hasInventoryData(value) {
+      return Object.values(value || {}).some((entry) => {
+        return Boolean(
+          entry
+          && (
+            entry.notFound
+            || String(entry.quantity || '').trim()
+            || String(entry.expiryDate || '').trim()
+            || normalizeCalcLines(entry.calcLines).length
+          )
+        );
+      });
+    }
+
+    function formatCabinetSavedStatus(state) {
+      if (!state?.hasData) return '未存';
+      const date = state.savedAt ? new Date(state.savedAt) : null;
+      if (!date || Number.isNaN(date.getTime())) return '有資料';
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return '已存 ' + hours + ':' + minutes;
+    }
+
+    function updateCabinetPickerState(cabinetId, state) {
+      if (!cabinetId) return;
+      cabinetSaveStates[cabinetId] = {
+        hasData: Boolean(state?.hasData),
+        savedAt: state?.savedAt || ''
+      };
+      renderCabinetPicker();
+    }
+
+    async function loadCabinetPickerState(cabinetId) {
+      const [savedAt, savedEntries] = await Promise.all([
+        loadLastSaveAt(cabinetId),
+        loadEntries(cabinetId)
+      ]);
+      return {
+        hasData: hasInventoryData(savedEntries),
+        savedAt: savedAt || ''
+      };
+    }
+
+    function renderCabinetPicker() {
+      if (!dom.cabinetPickerLabel || !dom.cabinetPickerMenu) return;
+      dom.cabinetPickerLabel.textContent = config.cabinetName;
+      dom.cabinetPickerBtn?.setAttribute('aria-label', '切換調劑台，目前是 ' + config.cabinetName);
+      dom.cabinetPickerMenu.innerHTML = cabinetCollection.map((cabinet) => {
+        const state = cabinetSaveStates[cabinet.cabinetId] || {};
+        const isCurrent = cabinet.cabinetId === config.cabinetId;
+        const classes = [
+          'cabinet-option',
+          isCurrent ? 'is-current' : '',
+          state.hasData ? 'has-saved' : ''
+        ].filter(Boolean).join(' ');
+        return `
+          <button class="${classes}" type="button" role="option" aria-selected="${isCurrent ? 'true' : 'false'}" data-cabinet-id="${escapeAttr(cabinet.cabinetId)}">
+            <span class="cabinet-option-name">${escapeHtml(cabinet.cabinetName)}</span>
+            <span class="cabinet-option-status">${escapeHtml(formatCabinetSavedStatus(state))}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function refreshCabinetPickerStates() {
+      const refreshId = ++cabinetStateRefreshId;
+      Promise.all(cabinetCollection.map(async (cabinet) => {
+        const state = await loadCabinetPickerState(cabinet.cabinetId);
+        return [cabinet.cabinetId, state];
+      })).then((states) => {
+        if (refreshId !== cabinetStateRefreshId) return;
+        cabinetSaveStates = Object.fromEntries(states);
+        renderCabinetPicker();
+      }).catch(() => {});
+    }
+
+    function setCabinetPickerOpen(open) {
+      if (!dom.cabinetPicker || !dom.cabinetPickerBtn) return;
+      if (open) {
+        closeSearch();
+        closeMobileActions();
+        if (currentLocationId) closeDrugList();
+      }
+      dom.cabinetPicker.classList.toggle('is-open', open);
+      dom.cabinetPickerBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
     function renderCabinetSelectors() {
       const options = cabinetCollection.map((cabinet) => `
         <option value="${escapeAttr(cabinet.cabinetId)}">${escapeHtml(cabinet.cabinetName)}</option>
@@ -21985,6 +22356,8 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
         dom.mobileCabinetSelect.innerHTML = options;
         dom.mobileCabinetSelect.value = config.cabinetId;
       }
+      renderCabinetPicker();
+      refreshCabinetPickerStates();
     }
 
     function updateRetroClock() {
@@ -22753,9 +23126,14 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       entries = {};
       activeCalcLines = [];
       calcStartsNewDraft = false;
+      cabinetSaveStates = Object.fromEntries([...cabinetIds].map((cabinetId) => [cabinetId, {
+        hasData: false,
+        savedAt: ''
+      }]));
       renderDrugStrip();
       renderSummary();
       renderCabinetArt();
+      renderCabinetPicker();
       updateSaveStatus('盤點資料已清除');
       showToast('已清除盤點資料');
     }
@@ -23650,10 +24028,14 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     function isInsideFloatingSurface(target) {
-      return Boolean(target.closest('#searchDock, #mobileActions, #workPanel, #adminPanel, .modal-backdrop.show'));
+      return Boolean(target.closest('#cabinetPicker, #searchDock, #mobileActions, #workPanel, #adminPanel, .modal-backdrop.show'));
     }
 
     function closeTopFloatingSurface() {
+      if (dom.cabinetPicker?.classList.contains('is-open')) {
+        setCabinetPickerOpen(false);
+        return true;
+      }
       if (dom.searchDock.classList.contains('is-open')) {
         closeSearch();
         return true;
@@ -23679,6 +24061,29 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     }
 
     document.addEventListener('click', consumeOutsideFloatingClick, true);
+
+    dom.cabinetPickerBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setCabinetPickerOpen(!dom.cabinetPicker.classList.contains('is-open'));
+    });
+    dom.cabinetPickerMenu.addEventListener('click', (event) => {
+      const option = event.target.closest('[data-cabinet-id]');
+      if (!option) return;
+      event.preventDefault();
+      setCabinetPickerOpen(false);
+      switchCabinet(option.dataset.cabinetId);
+    });
+    document.addEventListener('click', (event) => {
+      if (!dom.cabinetPicker.classList.contains('is-open')) return;
+      if (event.target.closest('#cabinetPicker')) return;
+      setCabinetPickerOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || !dom.cabinetPicker.classList.contains('is-open')) return;
+      setCabinetPickerOpen(false);
+      dom.cabinetPickerBtn.focus();
+    });
 
     dom.adminToggleBtn.addEventListener('click', toggleAdminPanel);
     dom.mobileActionsToggle.addEventListener('click', (event) => {
