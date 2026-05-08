@@ -333,10 +333,6 @@
       transition: opacity .34s ease;
     }
 
-    body.modal-open {
-      overflow: hidden;
-    }
-
     body.scene-focus .cabinet-panel,
     body.modal-open .cabinet-panel {
       filter: blur(2.2px) saturate(.94) brightness(1.01);
@@ -571,10 +567,10 @@
 
     .drug-card.done {
       padding-right: 44px;
-      border-color: rgba(163, 106, 57, .62);
-      background: #5E5B55;
-      color: #F4F4F2;
-      box-shadow: 0 14px 30px rgba(45, 44, 40, .22), 0 8px 18px rgba(17, 17, 17, .085);
+      color: #3B342E;
+      background: #F2EEE7;
+      border-color: rgba(163, 106, 57, .52);
+      box-shadow: 0 4px 12px rgba(39, 36, 30, .055);
     }
 
     .drug-card.done::after {
@@ -587,35 +583,76 @@
       justify-content: center;
       width: 24px;
       height: 24px;
-      color: #F7F1EA;
-      background: rgba(207, 132, 56, .92);
-      border: 1px solid rgba(255, 219, 174, .28);
+      color: #FFF7EF;
+      background: #A36A39;
+      border: 1px solid rgba(255, 230, 199, .42);
       border-radius: 999px;
-      box-shadow: 0 7px 16px rgba(207, 132, 56, .22);
+      box-shadow: 0 5px 13px rgba(163, 106, 57, .22);
       font-size: 16px;
       font-weight: 860;
       transform: translateY(-50%);
     }
 
     .drug-card.done .slot-badge {
-      color: #FFF7EF;
-      background: rgba(163, 106, 57, .82);
-      border-color: rgba(255, 219, 174, .18);
+      color: #FFF8EF;
+      background: #A36A39;
+      border-color: rgba(255, 230, 199, .20);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
     }
 
     .drug-card.done .drug-meta {
-      color: rgba(232, 231, 226, .78);
+      color: rgba(59, 52, 46, .68);
     }
 
     .drug-card.done .status-pill {
-      color: #2E2119;
-      background: rgba(235, 166, 83, .94);
+      color: #31261E;
+      background: #E7B77D;
     }
 
     .drug-card.done .status-pill.not-found {
-      color: #F7F1EA;
-      background: rgba(38, 29, 23, .48);
+      color: #FFF8EF;
+      background: #4F4942;
+    }
+
+    .drug-card.partial {
+      padding-right: 44px;
+      color: #3B342E;
+      background: #F2EEE7;
+      border-color: rgba(184, 68, 61, .45);
+      box-shadow: 0 4px 12px rgba(39, 36, 30, .055);
+    }
+
+    .drug-card-alert {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      width: 28px;
+      height: 28px;
+      color: #B8443D;
+      line-height: 1;
+      transform: translateY(-50%);
+    }
+
+    .drug-card-alert svg {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+
+    .drug-card.partial .slot-badge {
+      color: #FFF8EF;
+      background: #A36A39;
+      border-color: rgba(255, 230, 199, .20);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+    }
+
+    .drug-card.partial .drug-meta {
+      color: rgba(59, 52, 46, .68);
+    }
+
+    .drug-card.partial .status-pill {
+      color: #571F1B;
+      background: #F0C9C3;
     }
 
     .add-drug-card {
@@ -772,6 +809,26 @@
       font-size: 13px;
       color: var(--muted);
       font-weight: 700;
+    }
+
+    .field-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .expiry-warning {
+      flex: 0 0 auto;
+      padding: 2px 8px;
+      color: #9B342E;
+      background: #F7DEDA;
+      border: 1px solid rgba(184, 68, 61, .24);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 760;
+      line-height: 1.55;
     }
 
     input,
@@ -959,6 +1016,14 @@
       border-bottom: 0;
     }
 
+    #drugModal .modal-body {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
+    }
+
     .modal-backdrop.show .modal {
       animation: cardPopIn .34s cubic-bezier(.18, .98, .24, 1.12) both;
     }
@@ -1125,9 +1190,7 @@
     .modal-body {
       padding: 16px;
       background: #EDEDEA;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
+      overflow: hidden;
     }
 
     .quantity-field {
@@ -1168,6 +1231,13 @@
       box-shadow: inset 0 0 0 1px rgba(163, 106, 57, .20), 0 0 0 3px rgba(163, 106, 57, .10);
     }
 
+    .expiry-field.expiry-near #expiryInput {
+      color: #5C2B28;
+      background: #FFF6F4;
+      border-color: rgba(184, 68, 61, .48);
+      box-shadow: inset 0 0 0 1px rgba(184, 68, 61, .12), 0 0 0 3px rgba(184, 68, 61, .06);
+    }
+
     .expiry-control {
       width: 100%;
       min-width: 0;
@@ -1199,6 +1269,21 @@
     .calc .op {
       color: #686866;
       background: #e5e2dc;
+    }
+
+    .calc button[data-key="*"],
+    .calc button[data-key="-"],
+    .calc button[data-key="+"] {
+      color: #31261E;
+      background: #E7B77D;
+      border-color: rgba(163, 106, 57, .30);
+      box-shadow: 0 5px 12px rgba(163, 106, 57, .12);
+    }
+
+    .calc button[data-key="*"]:hover,
+    .calc button[data-key="-"]:hover,
+    .calc button[data-key="+"]:hover {
+      background: #EBC28F;
     }
 
     .calc .wide {
@@ -1325,6 +1410,17 @@
       border-radius: 0 0 var(--radius) var(--radius);
     }
 
+    #drugModal .modal-footer button {
+      display: inline-flex;
+      align-items: center;
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 44px;
+      padding: 0 10px;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
     .temp-drug-modal {
       width: min(430px, 100%);
     }
@@ -1343,15 +1439,21 @@
     }
 
     .not-found-icon {
-      min-width: 50px;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: #302f2d;
       flex: 0 0 auto;
-      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
-      font-size: 15px;
-      font-weight: 800;
       line-height: 1;
-      letter-spacing: 0;
-      white-space: nowrap;
+    }
+
+    .not-found-icon svg {
+      width: 24px;
+      height: 24px;
+      display: block;
+      overflow: visible;
     }
 
     .toast {
@@ -2121,30 +2223,65 @@
       .drug-card.done {
         padding-right: 42px;
         border-color: rgba(163, 106, 57, .66);
-        background: #5E5B55;
-        color: #F4F4F2;
-        box-shadow: 0 18px 36px rgba(45, 44, 40, .30), 0 12px 26px rgba(17, 17, 17, .13);
+        background: #F2EEE7;
+        color: #3B342E;
+        box-shadow: 0 4px 12px rgba(39, 36, 30, .055);
       }
 
       .drug-card.done .slot-badge {
-        color: #FFF7EF;
-        background: rgba(163, 106, 57, .82);
-        border-color: rgba(255, 219, 174, .18);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
+        color: #FFF8EF;
+        background: #A36A39;
+        border-color: rgba(255, 230, 199, .20);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
       }
 
       .drug-card.done .drug-meta {
-        color: rgba(232, 231, 226, .78);
+        color: rgba(59, 52, 46, .68);
       }
 
       .drug-card.done .status-pill {
-        color: #2E2119;
-        background: rgba(235, 166, 83, .94);
+        color: #31261E;
+        background: #E7B77D;
       }
 
       .drug-card.done .status-pill.not-found {
-        color: #F7F1EA;
-        background: rgba(38, 29, 23, .48);
+        color: #FFF8EF;
+        background: #4F4942;
+      }
+
+      .drug-card.partial {
+        padding-right: 42px;
+        border-color: rgba(184, 68, 61, .48);
+        background: #F2EEE7;
+        color: #3B342E;
+        box-shadow: 0 4px 12px rgba(39, 36, 30, .055);
+      }
+
+      .drug-card-alert {
+        right: 11px;
+        width: 26px;
+        height: 26px;
+      }
+
+      .drug-card-alert svg {
+        width: 26px;
+        height: 26px;
+      }
+
+      .drug-card.partial .slot-badge {
+        color: #FFF8EF;
+        background: #A36A39;
+        border-color: rgba(255, 230, 199, .20);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+      }
+
+      .drug-card.partial .drug-meta {
+        color: rgba(59, 52, 46, .68);
+      }
+
+      .drug-card.partial .status-pill {
+        color: #571F1B;
+        background: #F0C9C3;
       }
 
       .drug-title {
@@ -2274,12 +2411,16 @@
       .modal-body {
         display: flex;
         flex-direction: column;
-        flex: 1 1 auto;
         min-height: 0;
         padding: 12px 14px 12px;
+        overflow: hidden;
+      }
+
+      #drugModal .modal-body {
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
       }
 
       .field {
@@ -2331,10 +2472,25 @@
       }
 
       .calc .op {
-        color: #111111;
-        background: #A8B9CC;
-        border-color: #A8B9CC;
-        box-shadow: 0 7px 16px rgba(168, 185, 204, .24);
+        color: #4A433B;
+        background: #E6DFD4;
+        border-color: #DAD5CC;
+        box-shadow: 0 5px 12px rgba(39, 36, 30, .075);
+      }
+
+      .calc button[data-key="*"],
+      .calc button[data-key="-"],
+      .calc button[data-key="+"] {
+        color: #31261E;
+        background: #E7B77D;
+        border-color: rgba(163, 106, 57, .30);
+        box-shadow: 0 7px 16px rgba(163, 106, 57, .16);
+      }
+
+      .calc button[data-key="*"]:hover,
+      .calc button[data-key="-"]:hover,
+      .calc button[data-key="+"]:hover {
+        background: #EBC28F;
       }
 
       .calc button[data-key="clear"] {
@@ -21261,8 +21417,11 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
         <button id="closeModalBtn" class="icon-action-btn" aria-label="關閉盤點輸入視窗" title="關閉">×</button>
       </div>
       <div class="modal-body">
-        <div class="field">
-          <label for="expiryInput">效期</label>
+        <div class="field expiry-field" id="expiryField">
+          <div class="field-label-row">
+            <label for="expiryInput">效期</label>
+            <span id="expiryWarning" class="expiry-warning" hidden>效期將近</span>
+          </div>
           <div class="expiry-control">
             <input id="expiryInput" type="text" inputmode="numeric" pattern="[0-9/]*" maxlength="8" autocomplete="off" enterkeyhint="done" placeholder="YY/MM/DD">
           </div>
@@ -21307,7 +21466,11 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       <div class="modal-footer">
         <button id="deleteEntryBtn" class="button-secondary">清除本筆</button>
         <button id="notFoundBtn" class="not-found-btn" type="button">
-          <span class="not-found-icon" aria-hidden="true">¯\_(ツ)_/¯</span>
+          <span class="not-found-icon" aria-hidden="true">
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-160h80v160h160v80H200Zm560 0H600v-80h160v-160h80v160q0 33-23.5 56.5T760-120ZM120-760q0-33 23.5-56.5T200-840h160v80H200v160h-80v-160Zm720 0v160h-80v-160H600v-80h160q33 0 56.5 23.5T840-760ZM515.5-254.5Q530-269 530-290t-14.5-35.5Q501-340 480-340t-35.5 14.5Q430-311 430-290t14.5 35.5Q459-240 480-240t35.5-14.5ZM444-393h73q0-34 8-52t35-45q35-35 46.5-56.5T618-598q0-54-39-88t-99-34q-50 0-86 26t-52 74l66 27q7-26 26.5-42.5T480-652q29 0 46.5 15.5T544-595q0 20-9.5 37.5T502-521q-33 29-45.5 56T444-393Z"></path>
+            </svg>
+          </span>
           找不到庫存
         </button>
         <button id="saveEntryBtn">完成</button>
@@ -21465,7 +21628,9 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       calcLatestLine: $('#calcLatestLine'),
       calcHistoryDetails: $('#calcHistoryDetails'),
       calcHistoryList: $('#calcHistoryList'),
+      expiryField: $('#expiryField'),
       expiryInput: $('#expiryInput'),
+      expiryWarning: $('#expiryWarning'),
       notFoundBtn: $('#notFoundBtn'),
       saveEntryBtn: $('#saveEntryBtn'),
       deleteEntryBtn: $('#deleteEntryBtn'),
@@ -21927,9 +22092,53 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       return /^\d{2}\/\d{2}\/\d{2}$/.test(formatExpiryInput(value));
     }
 
+    function parseExpiryDate(value) {
+      const formatted = formatExpiryInput(value);
+      if (!/^\d{2}\/\d{2}\/\d{2}$/.test(formatted)) return null;
+      const [yy, mm, dd] = formatted.split('/').map(Number);
+      const date = new Date(2000 + yy, mm - 1, dd);
+      if (
+        date.getFullYear() !== 2000 + yy
+        || date.getMonth() !== mm - 1
+        || date.getDate() !== dd
+      ) return null;
+      date.setHours(0, 0, 0, 0);
+      return date;
+    }
+
+    function getExpiryWarningText(value) {
+      const expiryDate = parseExpiryDate(value);
+      if (!expiryDate) return '';
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const sixMonthsLater = new Date(today);
+      sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
+      if (expiryDate < today) return '效期已過';
+      if (expiryDate < sixMonthsLater) return '效期將近';
+      return '';
+    }
+
+    function updateExpiryWarning() {
+      const warningText = getExpiryWarningText(dom.expiryInput.value);
+      dom.expiryField?.classList.toggle('expiry-near', Boolean(warningText));
+      if (!dom.expiryWarning) return;
+      dom.expiryWarning.hidden = !warningText;
+      dom.expiryWarning.textContent = warningText || '效期將近';
+    }
+
     function isEntryDone(locationId, drugIndex) {
       const entry = entries[entryKey(locationId, drugIndex)];
       return Boolean(entry && (entry.notFound || (String(entry.quantity).trim() && isExpiryComplete(entry.expiryDate))));
+    }
+
+    function isEntryPartial(locationId, drugIndex) {
+      const entry = entries[entryKey(locationId, drugIndex)];
+      if (!entry || entry.notFound || isEntryDone(locationId, drugIndex)) return false;
+      return Boolean(
+        String(entry.quantity || '').trim()
+        || String(entry.expiryDate || '').trim()
+        || normalizeCalcLines(entry.calcLines).length
+      );
     }
 
     function isLocationDone(location) {
@@ -22148,12 +22357,22 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
         dom.drugStrip.innerHTML = location.items.map((item, index) => {
           const entry = entries[entryKey(location.id, index)];
           const done = isEntryDone(location.id, index);
+          const partial = isEntryPartial(location.id, index);
           const notFound = Boolean(entry?.notFound);
           const qty = notFound ? '找不到庫存' : (entry?.quantity ? escapeHtml(entry.quantity) : '未輸入');
           const expiry = notFound ? '不用填寫' : (entry?.expiryDate ? escapeHtml(formatExpiryInput(entry.expiryDate)) : '未輸入');
-          const statusText = notFound ? '找不到庫存' : (done ? '已完成' : '待輸入');
+          const statusText = notFound ? '找不到庫存' : (done ? '已完成' : (partial ? '未填完整' : '待輸入'));
+          const cardStateClass = done ? 'done' : (partial ? 'partial' : '');
+          const statusStateClass = done ? 'done' : (partial ? 'partial' : '');
+          const partialAlertIcon = partial ? `
+              <span class="drug-card-alert" aria-hidden="true">
+                <svg viewBox="0 -960 960 960" fill="currentColor">
+                  <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240ZM330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm34-80h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z"></path>
+                </svg>
+              </span>
+            ` : '';
           return `
-            <button class="drug-card ${done ? 'done' : ''}" data-drug-index="${index}">
+            <button class="drug-card ${cardStateClass}" data-drug-index="${index}">
               <span class="drug-title">
                 <span class="slot-badge">${escapeHtml(item.slotNo || '未設定')}</span><strong>${escapeHtml(item.drugName)}</strong>
               </span>
@@ -22161,7 +22380,8 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
                 數量：${qty}<br>
                 效期：${expiry}
               </span>
-              <span class="status-pill ${done ? 'done' : ''} ${notFound ? 'not-found' : ''}">${statusText}</span>
+              <span class="status-pill ${statusStateClass} ${notFound ? 'not-found' : ''}">${statusText}</span>
+              ${partialAlertIcon}
             </button>
           `;
         }).join('') + addCard;
@@ -22330,6 +22550,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       dom.qtyInput.value = entry.notFound ? '' : (entry.quantity || '');
       calcStartsNewDraft = activeCalcLines.length > 0;
       dom.expiryInput.value = entry.notFound ? '' : formatExpiryInput(entry.expiryDate || '');
+      updateExpiryWarning();
       dom.calcHistoryDetails.open = false;
       renderCalcHistory();
       window.clearTimeout(closeDrugModal.timer);
@@ -22421,6 +22642,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
 
     function handleExpiryInput(options = {}) {
       dom.expiryInput.value = formatExpiryInput(dom.expiryInput.value);
+      updateExpiryWarning();
       autoSaveDrugEntry(options);
     }
 
@@ -22428,6 +22650,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       if (!activeLocationId || activeDrugIndex < 0) return;
       dom.qtyInput.value = '';
       dom.expiryInput.value = '';
+      updateExpiryWarning();
       activeCalcLines = [];
       calcStartsNewDraft = false;
       entries[entryKey(activeLocationId, activeDrugIndex)] = {
@@ -23326,18 +23549,12 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       }, 200);
     }
 
-    function setMobileActionsOpen(open, immediate = false) {
+    function setMobileActionsOpen(open) {
       dom.mobileActionsToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       window.clearTimeout(setMobileActionsOpen.closeTimer);
       if (open) {
         dom.mobileActions.classList.remove('closing');
         dom.mobileActions.classList.add('is-open');
-        syncSceneFocus();
-        return;
-      }
-      // immediate: 下載前強制關閉，不跑動畫，避免 iOS 下載 UI 凍結計時器
-      if (immediate) {
-        dom.mobileActions.classList.remove('is-open', 'closing');
         syncSceneFocus();
         return;
       }
@@ -23357,6 +23574,13 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
 
     function closeMobileActions() {
       setMobileActionsOpen(false);
+    }
+
+    function closeMobileActionsNow() {
+      window.clearTimeout(setMobileActionsOpen.closeTimer);
+      dom.mobileActionsToggle.setAttribute('aria-expanded', 'false');
+      dom.mobileActions.classList.remove('is-open', 'closing');
+      syncSceneFocus();
     }
 
     function isInsideFloatingSurface(target) {
@@ -23437,15 +23661,15 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     dom.shareCsvBtn.addEventListener('click', shareCsv);
     dom.clearInventoryBtn.addEventListener('click', clearInventoryData);
     dom.mobileExportCsvBtn.addEventListener('click', () => {
-      setMobileActionsOpen(false, true);
+      closeMobileActionsNow();
       exportCsv();
     });
     dom.mobileShareCsvBtn.addEventListener('click', () => {
-      setMobileActionsOpen(false, true);
+      closeMobileActionsNow();
       shareCsv();
     });
     dom.mobileClearInventoryBtn.addEventListener('click', () => {
-      setMobileActionsOpen(false, true);
+      closeMobileActionsNow();
       clearInventoryData();
     });
     document.addEventListener('click', (event) => {
