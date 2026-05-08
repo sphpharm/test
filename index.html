@@ -221,7 +221,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      width: 96px;
+      width: 112px;
       height: 30px;
       padding: 0 8px;
       color: #5E5146;
@@ -237,8 +237,8 @@
     }
 
     .save-icon {
-      width: 18px;
-      height: 18px;
+      width: 19px;
+      height: 19px;
       flex: 0 0 auto;
       color: #D98935;
       opacity: .86;
@@ -246,13 +246,14 @@
     }
 
     .save-icon svg {
-      width: 18px;
-      height: 18px;
+      width: 19px;
+      height: 19px;
       display: block;
       filter: drop-shadow(0 0 4px rgba(217, 137, 53, .24));
     }
 
     .save-time {
+      flex: 1 1 auto;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1866,17 +1867,17 @@
       }
 
       .retro-clock {
-        min-width: 70px;
+        min-width: 56px;
         flex: 0 0 auto;
-        height: 30px;
-        padding: 0 8px;
+        height: 28px;
+        padding: 0 6px;
         border-radius: 9px;
-        font-size: 14px;
-        letter-spacing: .06em;
+        font-size: 12px;
+        letter-spacing: .03em;
       }
 
       .cabinet-switcher {
-        width: clamp(118px, 38vw, 170px);
+        width: clamp(96px, 30vw, 132px);
       }
 
       .cabinet-switch {
@@ -1898,9 +1899,9 @@
 
       .save-monitor {
         gap: 4px;
-        width: 82px;
+        width: 102px;
         height: 24px;
-        padding: 0 7px;
+        padding: 0 6px;
         background: #DDDDD9;
         border-radius: 999px;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72), 0 7px 16px rgba(17, 17, 17, .07);
@@ -1909,8 +1910,8 @@
 
       .save-icon,
       .save-icon svg {
-        width: 15px;
-        height: 15px;
+        width: 14px;
+        height: 14px;
       }
 
       .top-actions {
@@ -20895,10 +20896,8 @@
       <div class="topbar-right">
         <div id="saveMonitor" class="save-monitor" aria-live="polite" aria-label="儲存狀態">
           <span class="save-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 3h12l2 2v16H5z"></path>
-              <path d="M8 3v6h8V3"></path>
-              <path d="M8 17h8"></path>
+            <svg viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M200-200v-560 203-3 360Zm0 80q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160v147q-19-9-39-15t-41-9v-89L646-760H200v560h252q7 22 16.5 42t22.5 38H200Zm242-126q-1-9-1.5-17.5T440-281q0-54 20-104t58-89q-9-3-18.5-4.5T480-480q-50 0-85 35t-35 85q0 39 22.5 70.5T442-246Zm136.5 107.5Q520-197 520-280t58.5-141.5Q637-480 720-480t141.5 58.5Q920-363 920-280t-58.5 141.5Q803-80 720-80t-141.5-58.5ZM740-288v-112h-40v128l87 87 28-28-75-75ZM240-560h360v-160H240v160Z"></path>
             </svg>
           </span>
           <span id="saveTimeText" class="save-time">尚未存檔</span>
