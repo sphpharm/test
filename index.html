@@ -10129,6 +10129,84 @@
         transform: translateY(18px) scale(.72);
       }
     }
+
+    @media (max-width: 520px) {
+      .save-monitor {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: 70px !important;
+        max-width: 84px !important;
+        padding: 0 8px !important;
+        gap: 4px !important;
+      }
+
+      .save-time {
+        display: inline-block !important;
+        flex: 0 0 auto !important;
+        max-width: none !important;
+        padding-left: 2px !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        font-variant-numeric: tabular-nums;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .save-monitor {
+        min-width: 64px !important;
+        max-width: 70px !important;
+        padding: 0 6px !important;
+        font-size: 10.5px !important;
+      }
+
+      .save-led {
+        width: 7px !important;
+        height: 7px !important;
+      }
+    }
+
+    /* Inventory sheet must remain scrollable on short mobile viewports. */
+    #drugModal.show {
+      overflow: hidden !important;
+    }
+
+    #drugModal .modal {
+      display: flex !important;
+      flex-direction: column !important;
+      max-height: calc(100dvh - max(12px, env(safe-area-inset-top)) - env(safe-area-inset-bottom)) !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    #drugModal .modal-header,
+    #drugModal .modal-footer {
+      flex: 0 0 auto !important;
+    }
+
+    #drugModal .modal-body {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-y !important;
+    }
+
+    #drugModal .quantity-field,
+    #drugModal .calc,
+    #drugModal .calc-actions {
+      flex: 0 0 auto !important;
+    }
+
+    #drugModal .calc {
+      overflow: visible !important;
+      margin-bottom: 8px !important;
+    }
+
+    #drugModal .calc button {
+      touch-action: pan-y !important;
+    }
   </style>
 </head>
 <body class="">
@@ -29195,6 +29273,7 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
     let entries = {};
     let cabinetSaveStates = {};
     let cabinetStateRefreshId = 0;
+    let currentLastSaveAt = '';
     let pageScrollLockY = 0;
     let staleInventoryPrompted = false;
     let staleInventoryPromptResolve = null;
@@ -29563,9 +29642,18 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       return '最後 ' + hours + ':' + minutes;
     }
 
+    function formatCompactSaveTime(value) {
+      const date = value ? new Date(value) : null;
+      if (!date || Number.isNaN(date.getTime())) return '未存';
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      return hours + ':' + minutes;
+    }
+
     function updateLastSaveTime(value) {
+      currentLastSaveAt = value || '';
       const label = formatLastSaveTime(value);
-      dom.saveTimeText.textContent = label;
+      dom.saveTimeText.textContent = window.matchMedia('(max-width: 520px)').matches ? formatCompactSaveTime(value) : label;
       dom.saveMonitor.setAttribute('aria-label', label === '尚未存檔' ? '尚未存檔' : '最後存檔時間 ' + label.replace('最後 ', ''));
     }
 
@@ -31857,6 +31945,11 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       } else if (event.key === 'Escape' && dom.adminPanel.classList.contains('show')) {
         closeAdminPanel();
       }
+    });
+
+    window.addEventListener('resize', () => {
+      window.clearTimeout(updateLastSaveTime.resizeTimer);
+      updateLastSaveTime.resizeTimer = window.setTimeout(() => updateLastSaveTime(currentLastSaveAt), 120);
     });
 
     initApp();
