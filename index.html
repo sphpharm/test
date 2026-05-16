@@ -10258,6 +10258,93 @@
         inset 0 1px 0 rgba(255, 255, 255, .10) !important;
     }
 
+    /* Dark mode flattening: lower contrast controls, no bright raised buttons. */
+    html.dark-theme .progress {
+      color: rgba(232, 234, 237, .62) !important;
+      background: rgba(44, 46, 50, .50) !important;
+      border-color: rgba(255, 255, 255, .08) !important;
+      box-shadow: none !important;
+      backdrop-filter: blur(10px) saturate(1.02) !important;
+      -webkit-backdrop-filter: blur(10px) saturate(1.02) !important;
+    }
+
+    html.dark-theme #drugModal #expiryInput,
+    html.dark-theme #drugModal #qtyInput,
+    html.dark-theme #drugModal .qty-control,
+    html.dark-theme #drugModal .calc-actions,
+    html.dark-theme #drugModal .calc-history-details summary {
+      color: rgba(241, 243, 244, .82) !important;
+      background: rgba(50, 52, 56, .46) !important;
+      border-color: rgba(255, 255, 255, .10) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme #drugModal .calc {
+      background: rgba(42, 44, 48, .44) !important;
+      border-color: rgba(255, 255, 255, .08) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme #drugModal .calc button,
+    html.dark-theme #drugModal .modal-footer button,
+    html.dark-theme #drugModal .calc-add-btn,
+    html.dark-theme #drugModal .qty-back {
+      color: rgba(241, 243, 244, .82) !important;
+      background: rgba(56, 58, 63, .54) !important;
+      border-color: rgba(255, 255, 255, .10) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme #drugModal .calc button[data-key="*"],
+    html.dark-theme #drugModal .calc button[data-key="-"],
+    html.dark-theme #drugModal .calc button[data-key="+"],
+    html.dark-theme #drugModal .calc button[data-key="clear"],
+    html.dark-theme #drugModal .calc button[data-key="="],
+    html.dark-theme #drugModal .calc-add-btn,
+    html.dark-theme #drugModal .modal-footer button {
+      background: rgba(64, 67, 73, .58) !important;
+      border-color: rgba(255, 255, 255, .11) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme #drugModal .calc button:hover,
+    html.dark-theme #drugModal .modal-footer button:hover,
+    html.dark-theme #drugModal .calc-add-btn:hover,
+    html.dark-theme #drugModal .qty-back:hover {
+      background: rgba(72, 75, 82, .64) !important;
+      border-color: rgba(255, 255, 255, .13) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme .search-panel .search-form,
+    html.dark-theme .search-panel .search-result,
+    html.dark-theme .search-panel .search-empty,
+    html.dark-theme .search-panel .search-scope label,
+    html.dark-theme .mobile-actions-panel button,
+    html.dark-theme .mobile-actions-panel .button-secondary {
+      color: rgba(241, 243, 244, .82) !important;
+      background: rgba(50, 52, 56, .46) !important;
+      border-color: rgba(255, 255, 255, .10) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme .search-panel .search-close-btn,
+    html.dark-theme .search-panel .search-scope label:has(input:checked),
+    html.dark-theme .mobile-actions-panel button:hover,
+    html.dark-theme .mobile-actions-panel .button-secondary:hover {
+      color: rgba(248, 250, 252, .88) !important;
+      background: rgba(60, 63, 68, .54) !important;
+      border-color: rgba(255, 255, 255, .12) !important;
+      box-shadow: none !important;
+    }
+
+    html.dark-theme .mobile-actions-panel .button-danger {
+      color: rgba(255, 238, 238, .88) !important;
+      background: rgba(92, 58, 60, .52) !important;
+      border-color: rgba(242, 139, 130, .16) !important;
+      box-shadow: none !important;
+    }
+
     @media (max-width: 760px) {
       .drug-card.search-highlight {
         border-color: rgba(116, 132, 255, .48) !important;
