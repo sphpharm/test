@@ -6712,6 +6712,20 @@
       background-position: 0 0;
     }
 
+    .dot-field-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+    }
+
     body > *,
     html.dark-theme body > * {
       color: var(--stitch-ink);
@@ -31847,8 +31861,123 @@ Amoxicillin 250mg Cap    S1-02"></textarea>
       renderAdmin();
     }
 
+    function initDotFieldInteraction() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const canvas = document.createElement('canvas');
+      canvas.className = 'dot-field-canvas';
+      canvas.setAttribute('aria-hidden', 'true');
+      document.body.prepend(canvas);
+      const ctx = canvas.getContext('2d');
+      const particles = [];
+      const grid = 16;
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let running = false;
+
+      const resize = () => {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.ceil(width * dpr);
+        canvas.height = Math.ceil(height * dpr);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+
+      const canvasColors = () => {
+        const styles = getComputedStyle(document.documentElement);
+        return {
+          dot: styles.getPropertyValue('--stitch-canvas-dot').trim() || 'rgba(58, 61, 66, .068)',
+          bg: styles.getPropertyValue('--stitch-canvas-bg').trim() || '#EEF0F2'
+        };
+      };
+
+      const easeOutBack = (t) => {
+        const c1 = 1.15;
+        const c3 = c1 + 1;
+        return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+      };
+
+      const easeInOut = (t) => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+      const animate = (time) => {
+        ctx.clearRect(0, 0, width, height);
+        for (let index = particles.length - 1; index >= 0; index--) {
+          const particle = particles[index];
+          const age = time - particle.start;
+          if (age < 0) continue;
+          const progress = Math.min(age / particle.duration, 1);
+          const scatter = progress < .42
+            ? easeOutBack(progress / .42)
+            : 1 - easeInOut((progress - .42) / .58);
+          const x = particle.x + particle.dx * scatter;
+          const y = particle.y + particle.dy * scatter;
+          const alpha = Math.sin(progress * Math.PI);
+          ctx.globalAlpha = alpha;
+          ctx.beginPath();
+          ctx.fillStyle = particle.bgColor;
+          ctx.arc(particle.x, particle.y, 2.15, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+          ctx.beginPath();
+          ctx.fillStyle = particle.dotColor;
+          ctx.arc(x, y, particle.radius, 0, Math.PI * 2);
+          ctx.fill();
+          if (progress >= 1) particles.splice(index, 1);
+        }
+        if (particles.length) {
+          requestAnimationFrame(animate);
+        } else {
+          running = false;
+          ctx.clearRect(0, 0, width, height);
+        }
+      };
+
+      const spawn = (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        if (event.target.closest('button, input, select, textarea, a, .modal, .drug-card, .search-panel, .mobile-actions-panel, .cabinet-picker-menu')) return;
+        const baseX = Math.round(event.clientX / grid) * grid;
+        const baseY = Math.round(event.clientY / grid) * grid;
+        const colors = canvasColors();
+        const now = performance.now();
+        for (let gx = -3; gx <= 3; gx++) {
+          for (let gy = -3; gy <= 3; gy++) {
+            const distance = Math.hypot(gx, gy);
+            if (distance > 3.2) continue;
+            const x = baseX + gx * grid;
+            const y = baseY + gy * grid;
+            if (x < -grid || x > width + grid || y < -grid || y > height + grid) continue;
+            const angle = Math.atan2(gy || .2, gx || .2) + (Math.random() - .5) * .55;
+            const force = (44 - distance * 6.2) * (.82 + Math.random() * .28);
+            particles.push({
+              x,
+              y,
+              dx: Math.cos(angle) * force,
+              dy: Math.sin(angle) * force,
+              radius: .58 + Math.random() * .06,
+              start: now + Math.random() * 45,
+              duration: 920 + Math.random() * 180,
+              dotColor: colors.dot,
+              bgColor: colors.bg
+            });
+          }
+        }
+        if (!running) {
+          running = true;
+          requestAnimationFrame(animate);
+        }
+      };
+
+      resize();
+      window.addEventListener('resize', resize);
+      document.addEventListener('pointerdown', spawn, { passive: true });
+    }
+
     async function initApp() {
       loadThemePreference();
+      initDotFieldInteraction();
       updateRetroClock();
       setInterval(updateRetroClock, 15000);
       itemMaster = await loadItemMaster();
